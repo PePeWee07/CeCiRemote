@@ -1,0 +1,7 @@
+{
+  "name": "CeCiRemote",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
