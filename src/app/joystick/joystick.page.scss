@@ -1,0 +1,9 @@
+/* Estilo personalizado para el contenedor del joystick */
+.joystick-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gray; /* Cambia esto al color que desees */
+  width: 100px; /* Cambia el tamaño según tus preferencias */
+  height: 100px; /* Cambia el tamaño según tus preferencias */
+}

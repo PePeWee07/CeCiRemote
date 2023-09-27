@@ -1,0 +1,66 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>joystick</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+
+ <div class="container">
+
+  <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <h2>joystick 1</h2>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-button (click)="connect()" expand="full" color="success">Connect to server!</ion-button>
+        </ion-col>
+
+        <ion-col size="12" class="ion-text-center">
+          <ion-button (click)="disconnect()" expand="full" color="danger">Disconnect to server!</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-button (click)="goForward()" [disabled]="!connected" expand="full" color="primary">Forward</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4" class="ion-text-center">
+          <ion-button (click)="goLeft()" [disabled]="!connected" expand="full" color="primary">Left</ion-button>
+        </ion-col>
+
+        <ion-col size="4" class="ion-text-center">
+          <ion-button (click)="goStop()" [disabled]="!connected" expand="full" color="danger">Stop</ion-button>
+        </ion-col>
+
+        <ion-col size="4" class="ion-text-center">
+          <ion-button (click)="goRight()" [disabled]="!connected" expand="full" color="primary">Right</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-button (click)="goBack()" [disabled]="!connected" expand="full" color="primary">Back</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-row style="border: 1px dashed green;">
+      <ion-col size="12" class="ion-text-center">
+        <h2>Joystick 2</h2>
+        <div class="joystick-container" id="joystick"></div>
+      </ion-col>
+    </ion-row>
+
+
+ </div>
+
+</ion-content>

@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
+  },
+  {
+    path: 'joystick',
+    loadChildren: () => import('./joystick/joystick.module').then( m => m.JoystickPageModule)
   }
 ];
 
