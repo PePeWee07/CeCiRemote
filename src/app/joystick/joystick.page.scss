@@ -1,8 +1,115 @@
-/* Estilo personalizado para el contenedor del joystick */
+
+.container{
+  // min-height: 100vh;
+  // height: 100%;
+}
+
 .joystick-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 200px;
   height: 200px;
+
+  border: 20px ridge #0000ff80;
+  border-radius: 100%;
+  margin-top: 25%;
+  position: relative;
+  background: linear-gradient(rgba(169, 169, 169, 0.5), rgba(192, 192, 192, 0.3));
+
+    /* Agregar un resplandor estilo neon */
+    box-shadow: 0 0 2cap #0000ff80,
+    0 0 700px rgba(0, 0, 255, 0.5),;
+
+  animation-name: example;
+  animation-duration: 1.5s;
 }
+
+.arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  background: transparent;
+}
+
+.arrow.north {
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 15px 20px;
+  border-color: transparent transparent rgba(0, 0, 255, 0.5) transparent;
+}
+.arrow.north:active{
+  top: -60px;
+  border-width: 0 25px 30px;
+}
+
+/* Flecha Sur (hacia abajo) */
+.arrow.south {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 20px 15px 0;
+  border-color: rgba(0, 0, 255, 0.5) transparent transparent transparent;
+}
+.arrow.south:active{
+  bottom: -60px;
+  border-width: 30px 25px 0;
+}
+
+/* Flecha Este (hacia la derecha) */
+.arrow.east {
+  top: 50%;
+  right: -50px;
+  transform: translateY(-50%);
+  border-width: 15px 0 15px 20px;
+  border-color: transparent transparent transparent rgba(0, 0, 255, 0.5);
+}
+.arrow.east:active{
+  right: -60px;
+  border-width: 20px 0 20px 25px;
+}
+
+/* Flecha Oeste (hacia la izquierda) */
+.arrow.west {
+  top: 50%;
+  left: -50px;
+  transform: translateY(-50%);
+  border-width: 15px 20px 15px 0;
+  border-color: transparent rgba(0, 0, 255, 0.5) transparent transparent;
+}
+.arrow.west:active{
+  left: -60px;
+  border-width:  20px 25px 20px 0;
+}
+
+.cotent-josytick
+{
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.acordion-group-settings
+{
+  animation-name: example;
+  animation-duration: 1.5s;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
+}
+
+.ion-fab-settings{
+  animation-name: example;
+  animation-duration: 1.5s;
+}
+
+
+@keyframes example {
+  0% { transform: perspective(400px) rotateY(-5deg) rotateX(-5deg) translateX(0%) translateZ(150px);}
+  50% { transform: rotateY(0deg) rotateX(5deg) translateX(0%) translateZ(50px); }
+  90% { transform: rotateY(0deg) rotateX(5deg) translateX(0%) translateZ(10px); }
+  100% { transform: rotateY(0deg) rotateX(0deg) translateX(0%) translateZ(5px); }
+}
+
+

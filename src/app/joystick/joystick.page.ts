@@ -15,6 +15,10 @@ import { OverlayEventDetail } from '@ionic/core/components';
 })
 export class JoystickPage implements AfterViewInit, OnInit {
   @ViewChild(IonModal) modal: IonModal | undefined;
+  public alertButtons = ['OK'];
+
+  viewSettings: boolean = false;
+  viewJoystick2:boolean = false;
 
   //variables para la conexion Ros
   connected = false;
@@ -24,6 +28,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   wsAddress: string | null = 'ws://localhost:9090';
   topic: ROSLIB.Topic | null = null;
   topicSound: ROSLIB.Topic | null = null;
+  batteryTopic: ROSLIB.Topic | null = null;
   message: ROSLIB.Message | null = null;
 
   //variables para el joystick
@@ -37,43 +42,20 @@ export class JoystickPage implements AfterViewInit, OnInit {
   constructor(private modalCtrl: ModalController) {
   }
 
-
-  messageModal: string = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
-  name: string = "";
-
-  cancel() {
-    this.modal!.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    this.modal!.dismiss(this.name, 'confirm');
-  }
-
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.messageModal = `Hello, ${ev.detail.data}!`;
-    }
-  }
-
   ngOnInit() {
   }
-
+  ngOnDestroy(): void {
+    this.batteryTopic!.unsubscribe();
+  }
 
   ngAfterViewInit(): void {
-
       //configuracion del joystick
       this.optionsJoystick = {
-        zone: document.getElementById('joystick')!, // Elemento HTML de destino
-        mode: 'static', // Puedes cambiar esto a 'dynamic' si deseas que el joystick se mueva por toda la pantalla
-        // catchDistance: 150,
-        // multitouch: true,
-        // position: {
-        //   left: '50%',
-        //   top: '50%'
-        // },
-        color: 'red', // Color del joystick,
-        size: 70, // Tamaño del joystick
+        zone: document.getElementById('joystick')!,
+        mode: 'static',
+        multitouch: true,
+        color: 'blue',
+        size: 130,
       };
 
       //crea el joystick
@@ -98,37 +80,44 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
   }
 
-  configJoystick() {
-    // validación si es necesario
-    // Luego, puedes guardar el objeto optionsJoystick en la forma deseada, por ejemplo, en el almacenamiento local
-    this.managerJoystick.destroy();
-
-    console.log(this.optionsJoystick);
-
-    this.managerJoystick = nipplejs.create(this.optionsJoystick);
-
-    // localStorage
-    localStorage.setItem('optionsJoystick', JSON.stringify(this.optionsJoystick));
-
-    // Manejador para el evento 'move' del joystick
-    this.managerJoystick.on('move',  (_event:any, nipple:any) => {
-      // Calcular velocidades en función de la posición del joystick
-      this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
-      this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
-
-      console.log(`linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`);
-
-      this.moveRobot(this.linearSpeed, this.angularSpeed);
-    });
-
-    // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
-    this.managerJoystick.on('end',  () => {
-      this.linearSpeed = 0.0;
-      this.angularSpeed = 0.0;
-      this.moveRobot(this.linearSpeed, this.angularSpeed);
-    });
+  isToastOpen = false;
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
   }
 
+  configJoystick() {
+    if (this.optionsJoystick.size! >= 201 || this.optionsJoystick.size! <= 99) {
+      this.setOpen(true);
+      this.optionsJoystick.size = 100;
+    } else {
+      this.managerJoystick.destroy();
+
+      console.log(this.optionsJoystick);
+
+      this.managerJoystick = nipplejs.create(this.optionsJoystick);
+
+      // localStorage
+      localStorage.setItem('optionsJoystick', JSON.stringify(this.optionsJoystick));
+
+      // Manejador para el evento 'move' del joystick
+      this.managerJoystick.on('move',  (_event:any, nipple:any) => {
+        // Calcular velocidades en función de la posición del joystick
+        this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
+        this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+
+        console.log(`linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`);
+
+        this.moveRobot(this.linearSpeed, this.angularSpeed);
+      });
+
+      // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
+      this.managerJoystick.on('end',  () => {
+        this.linearSpeed = 0.0;
+        this.angularSpeed = 0.0;
+        this.moveRobot(this.linearSpeed, this.angularSpeed);
+      });
+    }
+  }
 
   // ngAfterViewInit(): void {
   //   // Configura las opciones del joystick
@@ -252,29 +241,69 @@ export class JoystickPage implements AfterViewInit, OnInit {
     if (this.ros) {
       this.reproducirSonido(5)
       this.ros.close();
+      this.batteryTopic!.unsubscribe();
       console.log('Disconnected from ROSBridge.');
     }
   }
-
 
   // Método para establecer el topic
   setTopic(): void {
     if (this.ros) {
 
+      // Suscribirse al topic de velocidad
       this.topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: '/mobile_base/commands/velocity', // Nombre del topic /mobile_base/commands/velocity
+        name: '/mobile_base/commands/velocity',
         messageType: 'geometry_msgs/Twist',
       });
 
+      // Suscribirse al topic del pitido
       this.topicSound = new ROSLIB.Topic({
         ros: this.ros,
-        name: '/mobile_base/commands/sound', // Nombre del topic /mobile_base/commands/velocity
+        name: '/mobile_base/commands/sound',
         messageType: 'kobuki_msgs/Sound',
       });
 
+      // Suscribirse al topic de la batería
+      this.batteryTopic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: '/mobile_base/events/power_system',
+        messageType: 'kobuki_msgs/PowerSystemEvent',
+      });
 
-      console.log('Topic set to /turtle1/cmd_vel');
+      // Registra un callback para manejar los eventos de la batería
+      this.batteryTopic.subscribe((message: any) => {
+        const event = message.event; //estado de la batería
+
+        // valores de los eventos del sistema de energía
+        const UNPLUGGED = 0;
+        const PLUGGED_TO_ADAPTER = 1;
+        const PLUGGED_TO_DOCKBASE = 2;
+        const CHARGE_COMPLETED = 3;
+        const BATTERY_LOW = 4;
+        const BATTERY_CRITICAL = 5;
+
+        // mensajes de eventos del sistema de energía
+        if (event === BATTERY_LOW) {
+          console.log('¡Batería baja!');
+        } else if (event === BATTERY_CRITICAL) {
+          console.log('¡Batería críticamente baja!');
+        } else if (event === UNPLUGGED) {
+          // robot desenchufado
+          console.log('Robot desenchufado');
+        } else if (event === PLUGGED_TO_ADAPTER) {
+          // enchufado a un adaptador
+          console.log('Robot enchufado a un adaptador');
+        } else if (event === PLUGGED_TO_DOCKBASE) {
+          // el robot se enchufa a la base de acoplamiento
+          console.log('Robot enchufado a la base de acoplamiento');
+        } else if (event === CHARGE_COMPLETED) {
+          // batería se completa
+          console.log('Carga de batería completada');
+        }
+      });
+
+      console.log('Topic sets');
     }else{
       console.log('Topic not set');
     }

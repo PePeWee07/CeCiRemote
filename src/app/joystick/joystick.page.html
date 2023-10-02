@@ -1,157 +1,232 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Joystick</ion-title>
+    <ion-title>Control</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="false">
 
 
- <div class="container">
+  <div class="container">
 
-  <!-- modal settings -->
+    <!-- btn settings -->
+      <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
+        <ion-fab-button size="small" color="primary">
+          <ion-icon name="cog" style="font-size: 22px"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
 
-  <div class="ion-padding">
-    <ion-button id="open-modal" expand="block">Open</ion-button>
-    <p>{{ messageModal }}</p>
+    <!-- acordion settings -->
+    <ng-container *ngIf="viewSettings">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2">
+          </ion-col>
 
-    <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
-      <ng-template>
+          <ion-col size="10">
+            <ion-header class="ion-padding-vertical">
+                <ion-title>Configuración</ion-title>
+            </ion-header>
 
-        <ion-header>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button (click)="cancel()">Cancel</ion-button>
-            </ion-buttons>
-            <ion-title>Configuración de Joystick</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+            <ion-accordion-group class="acordion-group-settings" expand="inset" [value]="['first']">
+              <ion-accordion value="first">
+                <ion-item slot="header" color="light">
+                  <ion-icon name="logo-rss" size="small"></ion-icon>
+                  <ion-label>Conexión</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                  <ion-item>
+                    <ion-input label="IP"[(ngModel)]="ipRobot" type="string" labelPlacement="stacked"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input label="Puerto"[(ngModel)]="port" type="number" labelPlacement="stacked"></ion-input>
+                  </ion-item>
 
-        <ion-content class="ion-padding">
+                   <!-- botones de conexion -->
+                  <div style="display: flex; justify-content: center; align-self: center">
+                    <div *ngIf="!connected" style="margin-top: 10px;">
+                      <ion-button (click)="connect()" size="small" shape="round" color="success">Conectar</ion-button>
+                    </div>
+                    <div *ngIf="connected" style="margin-top: 10px;">
+                      <ion-button (click)="disconnect()" size="small" shape="round" color="danger">Desconectar</ion-button>
+                    </div>
+                  </div>
+                </div>
+              </ion-accordion>
+              <!-- <ion-accordion value="second">
+                <ion-item slot="header" color="light">
+                  <ion-icon name="hammer" size="small"></ion-icon>
+                  <ion-label>Personalizar Joystick</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
 
-          <!-- Configuracion del joystick -->
-          <ion-list>
-            <ion-item-group>
-              <!-- <ion-item-divider>
-                <ion-label>Personalizar Joystick</ion-label>
-              </ion-item-divider>
+                  <ion-item>
+                    <ion-select label="Modo" label-placement="stacked" placeholder="Select mode" [(ngModel)]="optionsJoystick.mode">
+                      <ion-select-option value="static">Static</ion-select-option>
+                      <ion-select-option value="dynamic">Dynamic</ion-select-option>
+                      <ion-select-option value="semi">Semi</ion-select-option>
+                    </ion-select>
+                  </ion-item>
 
-              <ion-item>
-                <ion-select label="Modo" placeholder="Favorite Fruit" [(ngModel)]="optionsJoystick.mode">
-                  <ion-select-option value="static">Static</ion-select-option>
-                  <ion-select-option value="dynamic">Dynamic</ion-select-option>
-                  <ion-select-option value="semi">Semi</ion-select-option>
-                </ion-select>
-              </ion-item>
+                  <ion-item>
+                    <ion-input label="Color" [(ngModel)]="optionsJoystick.color" type="color" labelPlacement="stacked"></ion-input>
+                  </ion-item>
 
-              <ion-item>
-                <ion-input label="Color" [(ngModel)]="optionsJoystick.color" type="color"></ion-input>
-              </ion-item>
+                  <ion-item>
+                    <ion-input type="number" pattern="[0-9]*" min="100" max="200" placeholder="min: 100 - max:200" label="Tamaño"[(ngModel)]="optionsJoystick.size" labelPlacement="stacked"></ion-input>
+                  </ion-item>
 
-              <ion-item>
-                <ion-input label="Tamaño"[(ngModel)]="optionsJoystick.size" type="number"></ion-input>
-              </ion-item> -->
+                  <div style="display: flex; justify-content: center; align-self: center; margin-top: 10px;">
+                    <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Aplicar</ion-button>
+                  </div>
+                  <ion-toast
+                    [isOpen]="isToastOpen"
+                    message="Tamaño minimo 100 y maximo 200"
+                    [duration]="3000"
+                    (didDismiss)="setOpen(false)"
+                  ></ion-toast>
+                </div>
+              </ion-accordion> -->
+              <ion-accordion value="third">
+                <ion-item slot="header" color="light">
+                  <ion-icon name="walk" size="small"></ion-icon>
+                  <ion-label>Velocidad</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                  <ion-item>
+                    <ion-input label="Movimiento Linear"[(ngModel)]="maxLinear" type="number" labelPlacement="stacked"></ion-input>
+                    <ion-icon name="information-circle-outline" size="small" id="present-alert-lineal"></ion-icon>
+                    <ion-alert
+                      trigger="present-alert-lineal"
+                      header="Información"
+                      subHeader="Movimiento Linear"
+                      message="Se refiere al desplazamiento en línea recta."
+                      [buttons]="alertButtons"
+                    ></ion-alert>
+                  </ion-item>
+                  <ion-item>
+                    <ion-input label="Movimiento Angular"[(ngModel)]="maxAngular" type="number" labelPlacement="stacked"></ion-input>
+                    <ion-icon name="information-circle-outline" size="small" id="present-alert-angular"></ion-icon>
+                    <ion-alert
+                      trigger="present-alert-angular"
+                      header="Información"
+                      subHeader="Movimiento Angular"
+                      message="Se refiere a la rotación en la orientación alrededor de un punto o un eje."
+                      [buttons]="alertButtons"
+                    ></ion-alert>
+                  </ion-item>
+                  <div style="display: flex; justify-content: center; align-self: center; margin-top: 10px;">
+                    <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Aplicar</ion-button>
+                  </div>
+                </div>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-col>
 
-              <ion-item-divider>
-                <ion-label>Velocidad</ion-label>
-              </ion-item-divider>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
 
-              <ion-item>
-                <ion-input label="MaxLinear"[(ngModel)]="maxLinear" type="number"></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-input label="MaxAngular"[(ngModel)]="maxAngular" type="number"></ion-input>
-              </ion-item>
+    <div class="cotent-josytick">
+      <!--Joystick-->
+        <ion-grid>
+          <ion-row class="ion-justify-content-center ion-align-items-center">
 
-              <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Update Joystick</ion-button>
+            <ion-col size="12" class="ion-text-center ion-align-items-center">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <div class="joystick-container" id="joystick">
+                  <!-- Flecha Norte -->
+                  <div class="arrow north"></div>
+                  <!-- Flecha Sur -->
+                  <div class="arrow south"></div>
+                  <!-- Flecha Este -->
+                  <div class="arrow east"></div>
+                  <!-- Flecha Oeste -->
+                  <div class="arrow west"></div>
+                </div>
+              </div>
+            </ion-col>
 
-              <ion-item-divider>
-                <ion-label>Cnx</ion-label>
-              </ion-item-divider>
+          </ion-row>
+        </ion-grid>
 
-              <ion-item>
-                <ion-input label="IP"[(ngModel)]="ipRobot" type="string"></ion-input>
-                <ion-input label="Puerto"[(ngModel)]="port" type="number"></ion-input>
-              </ion-item>
-              <ion-button (click)="connect()" size="small" shape="round" color="success">Connect to server!</ion-button>
-              <ion-button (click)="disconnect()" size="small" shape="round" color="danger">Disconnect to server!</ion-button>
-            </ion-item-group>
-          </ion-list>
+        <!-- joystick botones -->
+        <ng-container *ngIf="viewJoystick2">
+          <ion-grid>
 
-        </ion-content>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <h2>Joystick 1</h2>
+              </ion-col>
+            </ion-row>
 
-      </ng-template>
-    </ion-modal>
+
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">Forward</ion-button>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">Left</ion-button>
+              </ion-col>
+
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
+              </ion-col>
+
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">Right</ion-button>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">Back</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-container>
+    </div>
 
   </div>
 
+</ion-content>
 
-
-
-
-
-
-
+<ion-footer class="ion-no-border" collapse="fade" [translucent]="true">
+  <ion-toolbar>
     <ion-grid>
-
       <ion-row>
-        <ion-col size="12" class="ion-text-center">
-          <h2>Joystick 1</h2>
-        </ion-col>
-      </ion-row>
-
-
-      <ion-row>
-        <ion-col size="12" class="ion-text-center">
-          <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">Forward</ion-button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">Left</ion-button>
-        </ion-col>
-
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
-        </ion-col>
-
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">Right</ion-button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="12" class="ion-text-center">
-          <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">Back</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-
-    <ion-grid>
-      <ion-row style="border: 1px dashed green;">
-        <ion-col size="4">
-        </ion-col>
-        <ion-col size="4" class="ion-text-center ion-align-items-center">
-          <h2>Joystick 2</h2>
-          <div style="border: 1px dashed green; display: flex; align-items: center; justify-content: center;">
-            <div class="joystick-container" id="joystick"></div>
+        <ion-col size="6">
+          <!-- bateria -->
+          <div style="display: flex; justify-content: start;">
+            <ion-item style="border-radius: 10px;">
+              <h6>Bateria: </h6>
+              <ion-icon style="color: cadetblue;" name="battery-charging"></ion-icon>
+              <ion-icon style="color: #c91414;" name="battery-dead"></ion-icon>
+              <ion-icon style="color: #80c914;" name="battery-full"></ion-icon>
+            </ion-item>
           </div>
         </ion-col>
-        <ion-col size="4">
+        <ion-col size="6">
+            <!-- cnx -->
+            <div style="display: flex; justify-content: end;">
+              <ion-item style="border-radius: 10px;">
+                <h6>Conexión: </h6>
+                <div *ngIf="connected">
+                  <ion-icon style="margin-top: 10px; margin-left: 5px; color: #80c914;" name="logo-rss"></ion-icon>
+                </div>
+                <div *ngIf="!connected">
+                  <ion-icon style="margin-top: 10px; margin-left: 5px; color: #c91414; font-size: 20px;" name="close-circle"></ion-icon>
+                </div>
+              </ion-item>
+            </div>
         </ion-col>
       </ion-row>
     </ion-grid>
-
-
-
-
-
-
- </div>
-
-</ion-content>
+  </ion-toolbar>
+</ion-footer>
