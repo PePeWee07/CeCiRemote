@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
 import { ModalSettingsComponent } from '../modal-settings/modal-settings.component';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { CeciTalkService } from '../service/ceci-talk.service';
 
 @Component({
   selector: 'app-joystick',
@@ -39,7 +40,18 @@ export class JoystickPage implements AfterViewInit, OnInit {
   maxAngular: number = 0.10;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(private modalCtrl: ModalController, private ceciTalkService: CeciTalkService) {
+  }
+
+  hablar() {
+    this.ceciTalkService.reproducirSonido().subscribe(
+      (res) => {
+        console.log("Respuesta: ", res);
+      },
+      (err) => {
+        console.log("Error", err);
+      }
+    )
   }
 
   ngOnInit() {

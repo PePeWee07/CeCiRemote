@@ -12,12 +12,18 @@
 
   <div class="container">
 
+
+    <div style="margin-left: 20%;">
+      <ion-button (click)="hablar()">hablar</ion-button>
+    </div>
+
     <!-- btn settings -->
       <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
         <ion-fab-button size="small" color="primary">
           <ion-icon name="cog" style="font-size: 22px"></ion-icon>
         </ion-fab-button>
       </ion-fab>
+
 
     <!-- acordion settings -->
     <ng-container *ngIf="viewSettings">
@@ -131,69 +137,66 @@
     </ng-container>
 
     <div class="cotent-josytick">
- <!-- joystick botones -->
- <ion-grid>
+      <ion-grid>
 
-  <ion-row>
-    <ion-grid style="margin-top: 45%;">
-
-
-      <ion-row>
-        <ion-col size="12" class="ion-text-center">
-          <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">Forward</ion-button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">Left</ion-button>
-        </ion-col>
-
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
-        </ion-col>
-
-        <ion-col size="4" class="ion-text-center">
-          <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">Right</ion-button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="12" class="ion-text-center">
-          <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">Back</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-row>
-
-  <ion-row>
-    <!--Joystick-->
-    <ion-grid>
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-
-        <ion-col size="12" class="ion-text-center ion-align-items-center">
-          <div style="display: flex; align-items: center; justify-content: center;">
-            <div class="joystick-container" id="joystick">
-              <!-- Flecha Norte -->
-              <div class="arrow north"></div>
-              <!-- Flecha Sur -->
-              <div class="arrow south"></div>
-              <!-- Flecha Este -->
-              <div class="arrow east"></div>
-              <!-- Flecha Oeste -->
-              <div class="arrow west"></div>
-            </div>
-          </div>
-        </ion-col>
-
-      </ion-row>
-    </ion-grid>
-  </ion-row>
-
- </ion-grid>
+        <ion-row>
+          <!-- joystick botones -->
+          <ion-grid style="margin-top: 45%;">
 
 
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">Forward</ion-button>
+              </ion-col>
+            </ion-row>
 
+            <ion-row>
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">Left</ion-button>
+              </ion-col>
+
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
+              </ion-col>
+
+              <ion-col size="4" class="ion-text-center">
+                <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">Right</ion-button>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">Back</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-row>
+
+        <ion-row>
+          <!--Joystick-->
+          <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+
+              <ion-col size="12" class="ion-text-center ion-align-items-center">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <div class="joystick-container" id="joystick">
+                    <!-- Flecha Norte -->
+                    <div class="arrow north"></div>
+                    <!-- Flecha Sur -->
+                    <div class="arrow south"></div>
+                    <!-- Flecha Este -->
+                    <div class="arrow east"></div>
+                    <!-- Flecha Oeste -->
+                    <div class="arrow west"></div>
+                  </div>
+                </div>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </ion-row>
+
+       </ion-grid>
     </div>
 
   </div>
