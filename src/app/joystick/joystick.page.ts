@@ -35,8 +35,8 @@ export class JoystickPage implements AfterViewInit, OnInit {
   linearSpeed: number = 0.0;
   angularSpeed: number = 0.0;
   managerJoystick: any;
-  maxLinear: number = 1;
-  maxAngular: number = 2;
+  maxLinear: number = 0.08;
+  maxAngular: number = 0.10;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
 
   constructor(private modalCtrl: ModalController) {
@@ -274,6 +274,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       // Registra un callback para manejar los eventos de la batería
       this.batteryTopic.subscribe((message: any) => {
         const event = message.event; //estado de la batería
+        console.log(event);
 
         // valores de los eventos del sistema de energía
         const UNPLUGGED = 0;
