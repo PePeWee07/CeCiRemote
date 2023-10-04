@@ -9,9 +9,14 @@ export class CeciTalkService {
 
   constructor(private _http: HttpClient) { }
 
-  Url = 'http://172.16.71.84:5000/';
+  Url = 'http://172.16.71.84:5000';
 
   reproducirSonido(): Observable<any> {
-    return this._http.get(`${this.Url}habla`);
+    return this._http.get(`${this.Url}/habla`);
   }
+
+  reproducirSonido2(nombreSonido: string): Observable<any> {
+    return this._http.get(`${this.Url}/reproducir_sonido/${nombreSonido}`);
+  }
+
 }

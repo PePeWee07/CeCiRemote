@@ -1,13 +1,15 @@
+import { ReadQuestionService } from './../service/read-question.service';
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 
 import * as ROSLIB from 'roslib';
 import * as nipplejs from 'nipplejs';
 
 import { ModalController } from '@ionic/angular';
-import { ModalSettingsComponent } from '../modal-settings/modal-settings.component';
-import { IonModal } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core/components';
 import { CeciTalkService } from '../service/ceci-talk.service';
+import { IonModal } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+
+import { ModalSettingsComponent } from '../modal-settings/modal-settings.component';
 
 @Component({
   selector: 'app-joystick',
@@ -23,6 +25,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
   //variables para la conexion Ros
   connected = false;
+  connecting: boolean = false; //sniper de carga network
   ros: ROSLIB.Ros | null = null;
   ipRobot: string = "172.16.71.84";
   port: string = "9090";
@@ -40,26 +43,34 @@ export class JoystickPage implements AfterViewInit, OnInit {
   maxAngular: number = 0.10;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
 
-  constructor(private modalCtrl: ModalController, private ceciTalkService: CeciTalkService) {
+  constructor(private ceciTalkService: CeciTalkService, private alertController: AlertController) {
   }
 
-  hablar() {
-    this.ceciTalkService.reproducirSonido().subscribe(
-      (res) => {
-        console.log("Respuesta: ", res);
-      },
-      (err) => {
-        console.log("Error", err);
-      }
-    )
+  // Metodo para leer pregunta
+  readQuestion(nombreSonido: string, texto?: string) {
+    if (texto) {
+      const utterance = new SpeechSynthesisUtterance(texto);
+      utterance.onend = () => {
+        this.CeCiTalk(nombreSonido);
+      };
+      speechSynthesis.speak(utterance);
+    }
+
+  }
+
+  //Metodo para reproducir Mp3 de CeCi
+  CeCiTalk(nombreSonido: string) {
+    this.ceciTalkService.reproducirSonido2(nombreSonido)
+    .subscribe(
+      response => console.log(response), // Maneja la respuesta del servidor
+      error => console.error("Alerta: ",error) // Maneja cualquier error
+    );
   }
 
   ngOnInit() {
   }
-  ngOnDestroy(): void {
-    this.batteryTopic!.unsubscribe();
-  }
 
+  // Metodo para renderizar el joystick
   ngAfterViewInit(): void {
       //configuracion del joystick
       this.optionsJoystick = {
@@ -92,11 +103,18 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
   }
 
+  //Tostada para validaciones de campo de velocidades de Joystick
   isToastOpen = false;
   setOpen(isOpen: boolean) {
     this.isToastOpen = isOpen;
   }
 
+  // tostada para confirmacion de actualizacion de joystick
+  setOpen2(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  // Metodo para actualizar configuracion de joystick
   configJoystick() {
     if (this.optionsJoystick.size! >= 201 || this.optionsJoystick.size! <= 99) {
       this.setOpen(true);
@@ -107,9 +125,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       console.log(this.optionsJoystick);
 
       this.managerJoystick = nipplejs.create(this.optionsJoystick);
-
-      // localStorage
-      localStorage.setItem('optionsJoystick', JSON.stringify(this.optionsJoystick));
+      this.setOpen2(true);
 
       // Manejador para el evento 'move' del joystick
       this.managerJoystick.on('move',  (_event:any, nipple:any) => {
@@ -131,69 +147,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
     }
   }
 
-  // ngAfterViewInit(): void {
-  //   // Configura las opciones del joystick
-  //   const options: nipplejs.JoystickManagerOptions = {
-  //     zone: document.getElementById('joystick')!, // Elemento HTML de destino
-  //     mode: 'static', // Puedes cambiar esto a 'dynamic' si deseas que el joystick se mueva por toda la pantalla
-  //     color: 'gray', // Color del joystick,
-  //     size: 170, // Tamaño del joystick
-  //   };
-
-  //   // Crea el joystick
-  //   const manager = nipplejs.create(options);
-
-  //   // Variables iniciales para velocidades lineal y angular
-  //   var linearSpeed = 0.0;
-  //   var angularSpeed = 0.0;
-
-  //   //movimientos Lineales (ajustar al gusto)
-  //   var maxLinear = 1;
-  //   var maxAngular = 2;
-
-  //   // Manejador para el evento 'move' del joystick
-  //   manager.on('move',  (_event, nipple) => {
-  //     // Calcular velocidades en función de la posición del joystick
-  //     linearSpeed = Math.sin(nipple.angle.radian) * maxLinear;
-  //     angularSpeed = -Math.cos(nipple.angle.radian) * maxAngular;
-
-  //     this.moveRobot(linearSpeed, angularSpeed);
-  //   });
-
-  //   // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
-  //   manager.on('end',  () => {
-  //     linearSpeed = 0.0;
-  //     angularSpeed = 0.0;
-  //     this.moveRobot(linearSpeed, angularSpeed);
-  //   });
-
-  // }
-
-
-   // Método para abrir el modal de configuración
-
-  //  async openModal() {
-  //   const modal = await this.modalCtrl.create({
-  //     component: ModalSettingsComponent,
-  //     componentProps: {
-  //       ipRobot: this.ipRobot,
-  //       port: this.port,
-  //       linearSpeed: this.linearSpeed,
-  //       angularSpeed: this.angularSpeed,
-  //     }
-  //   });
-  //   modal.present();
-
-  //   const { data, role } = await modal.onWillDismiss();
-
-  //   if (role === 'confirm') {
-  //     this.message = `Hello, ${data}!`;
-  //   }
-  // }
-
-
   // Método para mover el robot
-
   moveRobot(linear: number, angular:number) {
     var twist = new ROSLIB.Message({
         linear: {
@@ -214,16 +168,29 @@ export class JoystickPage implements AfterViewInit, OnInit {
     }
   }
 
-//conectar a ROSBridge
-  connect(): void {
+  //conectar a ROSBridge
+ async connect() {
     console.log('connect to ROSBridge ....');
     var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
 
     if (!this.ipRobot) {
-      console.log('IP address is required.');
+      const alert = await this.alertController.create({
+        header: 'Alert',
+        message: 'Se requiere dirección IP!',
+        buttons: ['OK'],
+      });
+
+      await alert.present();
     } else if (!this.port) {
-      console.log('Port is required.');
+      const alert = await this.alertController.create({
+        header: 'Alert',
+        message: 'Se requiere puerto!',
+        buttons: ['OK'],
+      });
+
+      await alert.present();
     } else {
+      this.connecting = true;
       this.wsAddress = newWsAddress;
 
       this.ros = new ROSLIB.Ros({
@@ -232,18 +199,33 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
       this.ros.on('connection', () => {
         console.log('Connected!');
+
         this.connected = true;
         this.setTopic();
         this.reproducirSonido(6)
+        this.connecting = false;
       });
 
-      this.ros.on('error', (error) => {
+      this.ros.on('error', async(error) => {
         console.log('Error connecting to websocket server: ', error);
+
+        const alert = await this.alertController.create({
+          header: 'Error',
+          subHeader: 'Error al conectar',
+          message: 'Compruebe si IP y Puerto son correctos.',
+          buttons: ['OK'],
+        });
+
+        await alert.present();
+
+        this.connected = false;
+        this.connecting = false;
       });
 
       this.ros.on('close', () => {
         console.log('Connection to websocket server closed.');
         this.connected = false;
+        this.connecting = false;
       });
     }
   }
@@ -322,15 +304,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
     }
   }
 
-  // Metodo de sonido al coneccion exitosa
+  // Metodo de sonido al coneccion exitosa (pitidos del robot)
   reproducirSonido(tipoSonido: number): void {
     const soundMessage = new ROSLIB.Message({
-      value: tipoSonido  // El valor de tipoSonido corresponde al tipo de sonido que deseas reproducir
+      value: tipoSonido  // el tipoSonido corresponde al tipo de sonido que deseas reproducir
     });
 
     // Publica el mensaje en el tópico de sonido
     if (this.topicSound) {
-
       this.topicSound.publish(soundMessage);
     }else{
       console.log('Topic sound no set');
@@ -343,7 +324,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
     if (this.topic) {
       this.message = new ROSLIB.Message({
         linear: {
-          x: 1,
+          x: this.maxLinear,
           y: 0,
           z: 0,
         },
@@ -363,68 +344,68 @@ export class JoystickPage implements AfterViewInit, OnInit {
   // Método para girar a la izquierda
   goLeft(): void {
     if(this.topic){
-    this.message = new ROSLIB.Message({
-      linear: {
-        x: 0.5,
-        y: 0,
-        z: 0,
-      },
-      angular: {
-        x: 0,
-        y: 0,
-        z: 0.5,
-      },
-    });
-    this.topic!.publish(this.message);
-    console.log('Sent Left command.');
-  }else{
+      this.message = new ROSLIB.Message({
+        linear: {
+          x: this.maxLinear,
+          y: 0,
+          z: 0,
+        },
+        angular: {
+          x: 0,
+          y: 0,
+          z: this.maxAngular,
+        },
+      });
+      this.topic!.publish(this.message);
+      console.log('Sent Left command.');
+    }else{
       console.log('Topic move no set');
     }
-}
+  }
 
-// Método para girar a la derecha
-goRight(): void {
-  if(this.topic){
-    this.message = new ROSLIB.Message({
-      linear: {
-        x: 0.5,
-        y: 0,
-        z: 0,
-      },
-      angular: {
-        x: 0,
-        y: 0,
-        z: -0.5,
-      },
-    });
-    this.topic!.publish(this.message);
-    console.log('Sent Right command.');
-  }else{
-      console.log('Topic move no set');
-    }
-}
+  // Método para girar a la derecha
+  goRight(): void {
+    if(this.topic){
+      this.message = new ROSLIB.Message({
+        linear: {
+          x: this.maxLinear,
+          y: 0,
+          z: 0,
+        },
+        angular: {
+          x: 0,
+          y: 0,
+          z: -this.maxAngular,
+        },
+      });
+      this.topic!.publish(this.message);
+      console.log('Sent Right command.');
+    }else{
+        console.log('Topic move no set');
+      }
+  }
 
- // Método para retroceder
-goBack(): void {
-  if(this.topic){
-    this.message = new ROSLIB.Message({
-      linear: {
-        x: -1,
-        y: 0,
-        z: 0,
-      },
-      angular: {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-    });
-    this.topic!.publish(this.message);
-    console.log('Sent Back command.');
-  }else{
-      console.log('Topic move no set');
-    }
-}
+  // Método para retroceder
+  goBack(): void {
+    if(this.topic){
+      this.message = new ROSLIB.Message({
+        linear: {
+          x: -this.maxLinear,
+          y: 0,
+          z: 0,
+        },
+        angular: {
+          x: 0,
+          y: 0,
+          z: 0,
+        },
+      });
+      this.topic!.publish(this.message);
+      console.log('Sent Back command.');
+    }else{
+        console.log('Topic move no set');
+      }
+  }
 
   // Método para detener el movimiento
   goStop(): void {
