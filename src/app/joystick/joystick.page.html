@@ -19,18 +19,30 @@
         <ion-item slot="header" color="rose">
           <ion-label>Preguntas frecuentes</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">
+        <div class="ion-padding-horizontal" slot="content">
+            <ion-list>
+              <ion-item>
+                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
+              </ion-item>
+              <ion-item>
+                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
+              </ion-item>
+              <ion-item>
+                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
+              </ion-item>
+            </ion-list>
 
-          <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
+          <!-- <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a> -->
 
         </div>
       </ion-accordion>
     </ion-accordion-group>
 
 
+
     <!-- btn settings -->
       <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
-        <ion-fab-button size="small" color="primary">
+        <ion-fab-button size="small"  [color]="viewSettings ? 'tertiary' : 'medium'">
           <ion-icon name="cog" style="font-size: 22px"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -43,8 +55,8 @@
           <ion-col size="2">
           </ion-col>
 
-          <ion-col size="10">
-                <ion-title class="ion-text-center">Configuración</ion-title>
+          <ion-col size="10" >
+                <h5 class="ion-text-center">Configuración</h5>
 
             <ion-accordion-group class="acordion-group-settings" expand="inset" [value]="['first']">
               <ion-accordion value="first">
