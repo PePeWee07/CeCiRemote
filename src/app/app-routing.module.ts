@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'joystick',
     loadChildren: () => import('./joystick/joystick.module').then( m => m.JoystickPageModule)
+  },
+  {
+    path: 'preguntas',
+    loadChildren: () => import('./preguntas/preguntas.module').then( m => m.PreguntasPageModule)
   }
 ];
 

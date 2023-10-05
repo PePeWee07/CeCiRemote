@@ -9,7 +9,7 @@ export class CeciTalkService {
 
   constructor(private _http: HttpClient) { }
 
-  Url = 'http://172.16.71.84:5000';
+  Url = 'http://192.168.0.103:5000';
 
   reproducirSonido(): Observable<any> {
     return this._http.get(`${this.Url}/habla`);

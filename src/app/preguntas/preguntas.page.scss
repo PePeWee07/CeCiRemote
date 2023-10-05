@@ -1,0 +1,26 @@
+.acordion-group-settings
+{
+  animation-name: example;
+  animation-duration: 1.5s;
+
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
+}
+
+
+@keyframes example {
+  0% { transform: perspective(400px) rotateY(-5deg) rotateX(-5deg) translateX(0%) translateZ(150px);}
+  50% { transform: rotateY(0deg) rotateX(5deg) translateX(0%) translateZ(50px); }
+  90% { transform: rotateY(0deg) rotateX(5deg) translateX(0%) translateZ(10px); }
+  100% { transform: rotateY(0deg) rotateX(0deg) translateX(0%) translateZ(5px); }
+}
+
+
+
+.custom-button {
+  animation: shake 0.5s ease infinite;
+
+  white-space: normal; /* Permite que el texto se divida en varias líneas */
+  word-wrap: break-word; /* Divide las palabras si no caben en el ancho del botón */
+  font-size: 16px; /* Tamaño de fuente personalizado */
+}

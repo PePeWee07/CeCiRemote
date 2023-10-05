@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Preguntame</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- <ion-button (click)="playAudio('audio1')">Reproducir Audio 1</ion-button> -->
+
+  <ion-grid style="height: 100%;">
+    <ion-row style="height: 100%;" class="ion-justify-content-center  ion-align-items-center">
+
+      <ion-col size="12">
+
+        <ion-button expand="block" class="custom-button ion-padding-bottom" color="tertiary" (click)="playAudio('0')">Preséntate</ion-button>
+
+        <!-- preguntas frecuentes -->
+        <ion-accordion-group expand="inset" class="ion-padding acordion-group-settings">
+          <ion-accordion value="first">
+            <ion-item slot="header" color="rose">
+              <ion-label>Preguntas frecuentes</ion-label>
+            </ion-item>
+            <div class="ion-padding-horizontal" slot="content">
+
+                <ion-list>
+                    <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('1pg_donde')">¿Dónde trabajaras ahora?</ion-button>
+
+                    <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('2pg_transferencia')">¿Qué opinas de tu transferencia tecnológica?</ion-button>
+
+                    <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('3pg_verdenuevo')">¿Dónde te podemos ver?</ion-button>
+
+                    <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('4')">¿Qué hacen en los puntos GIRA?</ion-button>
+
+                    <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('5')">¿Porque es impórtate reciclar?</ion-button>
+                </ion-list>
+
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-col>
+
+
+
+      <ion-col size="12" >
+        <!-- preguntas frecuentes -->
+        <ion-accordion-group expand="inset" class="ion-padding acordion-group-settings">
+          <ion-accordion value="first">
+            <ion-item slot="header" color="rose">
+              <ion-label>Otras Preguntas</ion-label>
+            </ion-item>
+            <div class="ion-padding-horizontal" slot="content">
+
+              <ion-list>
+                <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('6')">¿Qué hace GIRA para promover el reciclaje y cuidado del planeta?</ion-button>
+
+                <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('7')">¿Qué opinas de tu transferencia tecnológica?</ion-button>
+
+                <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('8')">¿Como puedo ser un Reci Amigo?</ion-button>
+
+                <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('9')">¿Como puedo contribuir a estos esfuerzos?</ion-button>
+
+                <ion-button expand="block" class="custom-button" color="tertiary" (click)="playAudio('10')">¿Cuándo nos volveremos a ver?</ion-button>
+            </ion-list>
+
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
+
+
+
+
+
+</ion-content>

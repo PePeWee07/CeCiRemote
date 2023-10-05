@@ -3,5 +3,15 @@
   "integrations": {
     "capacitor": {}
   },
+  "proxies": [
+    {
+      "path": "/reproducir_sonido/<nombre_sonido>",
+      "proxyUrl": "http://192.168.0.103:5000/reproducir_sonido/<nombre_sonido>"
+    },
+    {
+      "path": "/*",
+      "proxyUrl": "ws://192.168.0.103:9090"
+    }
+  ],
   "type": "angular"
 }
