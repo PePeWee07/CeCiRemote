@@ -1,11 +1,12 @@
-<ion-header [translucent]="true">
+
+<div>
   <ion-toolbar>
-    <ion-title>Control</ion-title>
+    <ion-title class="header-menu">Control</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</div>
 
 <ion-content [fullscreen]="false">
 
@@ -13,34 +14,9 @@
   <div class="container">
 
 
-    <!-- preguntas frecuentes -->
-    <!-- <ion-accordion-group expand="inset" style="margin-left: 20%;" class="acordion-group-settings">
-      <ion-accordion value="first">
-        <ion-item slot="header" color="rose">
-          <ion-label>Preguntas frecuentes</ion-label>
-        </ion-item>
-        <div class="ion-padding-horizontal" slot="content">
-            <ion-list>
-              <ion-item>
-                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
-              </ion-item>
-              <ion-item>
-                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
-              </ion-item>
-              <ion-item>
-                <a (click)="readQuestion('peso', 'Quieres saber mi peso?')">Dime tu peso?</a>
-              </ion-item>
-            </ion-list>
-
-        </div>
-      </ion-accordion>
-    </ion-accordion-group> -->
-
-
-
     <!-- btn settings -->
       <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
-        <ion-fab-button size="small"  [color]="viewSettings ? 'tertiary' : 'medium'">
+        <ion-fab-button size="small"  [color]="viewSettings ? 'warning' : 'medium'">
           <ion-icon name="cog" style="font-size: 22px"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -50,15 +26,16 @@
     <ng-container *ngIf="viewSettings">
       <ion-grid>
         <ion-row>
+
           <ion-col size="2">
           </ion-col>
 
           <ion-col size="10" >
-                <h5 class="ion-text-center">Configuración</h5>
+            <h5 class="ion-text-center"> <b>Configuración</b> </h5>
 
             <ion-accordion-group class="acordion-group-settings" expand="inset" [value]="['first']">
               <ion-accordion value="first">
-                <ion-item slot="header" color="light">
+                <ion-item slot="header" class="item-header-settings">
                   <ion-icon name="logo-rss" size="small"></ion-icon>
                   <ion-label>Conexión</ion-label>
                 </ion-item>
@@ -116,7 +93,7 @@
                 </div>
               </ion-accordion> -->
               <ion-accordion value="third">
-                <ion-item slot="header" color="light">
+                <ion-item slot="header" class="item-header-settings">
                   <ion-icon name="walk" size="small"></ion-icon>
                   <ion-label>Velocidad</ion-label>
                 </ion-item>
@@ -149,57 +126,65 @@
                 </div>
               </ion-accordion>
             </ion-accordion-group>
+
             <ion-toast
                 [isOpen]="isToastOpen"
                 message="Joystick actualizado"
                 [duration]="2000"
                 (didDismiss)="setOpen2(false)"
-              ></ion-toast>
+            ></ion-toast>
           </ion-col>
 
         </ion-row>
       </ion-grid>
     </ng-container>
 
-    <div class="cotent-josytick">
       <ion-grid>
 
         <!-- joystick botones -->
         <ion-row>
-          <ion-grid style="margin-top: 45%; ">
+          <ion-grid style="margin-top: 20%;">
 
-            <ion-row class="ion-justify-content-center">
-              <div style="display: flexbox;">
+            <ion-row class="ion-justify-content-center joystick-btns">
 
-                <ion-col size="12" class="ion-text-center ion-padding-bottom">
-                  <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">
-                    <ion-icon name="arrow-up"></ion-icon>
-                  </ion-button>
-                </ion-col>
+              <ion-toolbar style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
+                <ion-title class="joystick-btns-header-menu">Botones</ion-title>
+              </ion-toolbar>
 
-                <ion-col size="3" class="ion-text-center">
-                  <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">
-                    <ion-icon name="arrow-back"></ion-icon>
-                  </ion-button>
-                </ion-col>
+              <div class="joystick-btns-content" >
 
-                <ion-col size="3" class="ion-text-center">
-                  <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
-                </ion-col>
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
+                  <ion-col size="3" class="ion-text-center">
+                    <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">
+                      <ion-icon name="arrow-up"></ion-icon>
+                    </ion-button>
+                  </ion-col>
 
-                <ion-col size="3" class="ion-text-center">
-                  <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </ion-button>
-                </ion-col>
+                  <ion-col size="3" class="ion-text-center">
+                    <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">
+                      <ion-icon name="arrow-back"></ion-icon>
+                    </ion-button>
+                  </ion-col>
 
-                <ion-col size="12" class="ion-text-center ion-padding-top">
-                  <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">
-                    <ion-icon name="arrow-down"></ion-icon>
-                  </ion-button>
-                </ion-col>
+                  <ion-col size="3" class="ion-text-center">
+                    <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
+                  </ion-col>
+
+                  <ion-col size="3" class="ion-text-center">
+                    <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+
+                  <ion-col size="3" class="ion-text-center">
+                    <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">
+                      <ion-icon name="arrow-down"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </div>
 
               </div>
+
             </ion-row>
 
           </ion-grid>
@@ -208,9 +193,13 @@
         <!--Joystick-->
         <ion-row>
           <ion-grid>
-            <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-row class="joystick-joystick">
 
-              <ion-col size="12" class="ion-text-center ion-align-items-center">
+              <ion-toolbar style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
+                <ion-title class="joystick-btns-header-menu">Joystick</ion-title>
+              </ion-toolbar>
+
+              <ion-col size="12">
                 <div style="display: flex; align-items: center; justify-content: center;">
                   <div class="joystick-container" id="joystick">
                     <!-- Flecha Norte -->
@@ -232,13 +221,12 @@
        </ion-grid>
     </div>
 
-  </div>
 
 </ion-content>
 
-<ion-footer class="ion-no-border" collapse="fade" [translucent]="true">
-  <ion-toolbar>
-    <ion-grid>
+<ion-footer class="ion-no-border" collapse="fade">
+  <ion-toolbar class="footer-style">
+    <ion-grid >
       <ion-row>
         <!-- bateria -->
         <!-- <ion-col size="6">
@@ -255,21 +243,21 @@
             <!-- cnx -->
             <div style="display: flex; justify-content: start;">
 
-              <div *ngIf="!connecting">
-              <ion-item style="border-radius: 10px;">
-                  <h6>Conexión: </h6>
+              <div *ngIf="!connecting" class="cnx-style">
+                <ion-item style="border-radius: 10px;">
+                  <h6> <b>Conexión:</b> </h6>
                     <div *ngIf="connected">
                       <ion-icon style="margin-top: 10px; margin-left: 5px; color: #80c914;" name="logo-rss"></ion-icon>
                     </div>
                     <div *ngIf="!connected">
                       <ion-icon style="margin-top: 10px; margin-left: 5px; color: #c91414; font-size: 20px;" name="close-circle"></ion-icon>
                     </div>
-                  </ion-item>
-                </div>
+                </ion-item>
+              </div>
 
-              <div *ngIf="connecting">
+              <div *ngIf="connecting" class="cnx-style">
                 <ion-item style="border-radius: 10px;">
-                  <h6>Conexión: </h6>
+                  <h6> <b>Conexión:</b> </h6>
                   <ion-spinner *ngIf="connecting"></ion-spinner>
                 </ion-item>
               </div>

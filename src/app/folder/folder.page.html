@@ -1,21 +1,42 @@
-<ion-header [translucent]="true">
+<div>
   <ion-toolbar>
+    <ion-title class="header-menu">CeCiBot Control Center</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
   </ion-toolbar>
-</ion-header>
+</div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
+<ion-content [fullscreen]="true" class="ion-text-center center-content">
   <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <div style="display: flex; justify-content: center; align-items: center;" class="welcome-content">
+      <div style="margin-top: 10%;">
+        <div class="app-description">
+          <h2 style="margin: 0"><b>Bienvenido</b></h2>
+          <b>
+            <p>Controla a CeCi y embárcate en aventuras robóticas emocionantes con nuestro joystick personalizado.</p>
+          </b>
+        </div>
+        <img src="../../assets/img/hola_robot.svg" alt="Pokemon logo" />
+
+      </div>
+    </div>
   </div>
 </ion-content>
+
+<ion-footer collapse="fade" class="ion-no-border">
+  <ion-toolbar class="ion-text-center" style="background: #ffda56c2;">
+    <h6 class="capitalize" style="display: inline; color: rgb(0, 0, 0)">
+      <b style="margin-right: 5px;">Creador por:</b>
+    </h6>
+    <p style="display: inline">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.instagram.com/pepe._.roman/"
+        >José Román</a
+      >
+    </p>
+  </ion-toolbar>
+</ion-footer>

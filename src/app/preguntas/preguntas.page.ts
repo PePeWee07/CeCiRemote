@@ -17,7 +17,7 @@ export class PreguntasPage implements OnInit {
 
   setupSounds() {
     // Agrega tus archivos de audio junto con sus nombres clave en el objeto 'sounds'
-    this.sounds['0'] = new Howl({ src: ['../../assets/audios/1pg_donde.mp3'] });
+    this.sounds['0'] = new Howl({ src: ['../../assets/audios/0Prespg.mp3'] });
     this.sounds['1pg_donde'] = new Howl({ src: ['../../assets/audios/1pg_donde.mp3'] });
     this.sounds['2pg_transferencia'] = new Howl({ src: ['../../assets/audios/2pg_transfencia.mp3'] });
     this.sounds['3pg_verdenuevo'] = new Howl({ src: ['../../assets/audios/3pg_verdenuevo.mp3'] });
@@ -76,8 +76,18 @@ export class PreguntasPage implements OnInit {
 
   }
 
-
+mensaje: string = "No se conecto a FLASK";
   ngOnInit() {
+    this.ceciTalkService.getHelloWorldMessage().subscribe(
+      (data:any) => {
+      this.mensaje = data.message;
+    }, (error:any) => {
+        console.log("FLak-Error: ", error);
+        this.mensaje = error
+    }, () => {
+      console.log("FLak-Complete");
+    }
+    );
   }
 
 }

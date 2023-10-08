@@ -47,25 +47,25 @@ export class JoystickPage implements AfterViewInit, OnInit {
   }
 
   // Metodo para leer pregunta
-  readQuestion(nombreSonido: string, texto?: string) {
-    if (texto) {
-      const utterance = new SpeechSynthesisUtterance(texto);
-      utterance.onend = () => {
-        this.CeCiTalk(nombreSonido);
-      };
-      speechSynthesis.speak(utterance);
-    }
+  // readQuestion(nombreSonido: string, texto?: string) {
+  //   if (texto) {
+  //     const utterance = new SpeechSynthesisUtterance(texto);
+  //     utterance.onend = () => {
+  //       this.CeCiTalk(nombreSonido);
+  //     };
+  //     speechSynthesis.speak(utterance);
+  //   }
 
-  }
+  // }
 
-  //Metodo para reproducir Mp3 de CeCi
-  CeCiTalk(nombreSonido: string) {
-    this.ceciTalkService.reproducirSonido2(nombreSonido)
-    .subscribe(
-      response => console.log(response), // Maneja la respuesta del servidor
-      error => console.error("Alerta: ",error) // Maneja cualquier error
-    );
-  }
+  // //Metodo para reproducir Mp3 de CeCi
+  // CeCiTalk(nombreSonido: string) {
+  //   this.ceciTalkService.reproducirSonido2(nombreSonido)
+  //   .subscribe(
+  //     response => console.log(response), // Maneja la respuesta del servidor
+  //     error => console.error("Alerta: ",error) // Maneja cualquier error
+  //   );
+  // }
 
   ngOnInit() {
   }
