@@ -31,7 +31,7 @@
         <ion-col size="12">
 
           <!-- <h3>{{mensaje | json}}</h3> -->
-            <ion-button expand="block" class="custom-button ion-padding-bottom" color="tertiary" (click)="playAudio('0')"> <b>Preséntate</b></ion-button>
+            <ion-button expand="block" class="custom-button ion-padding-bottom" [disabled]="isPlaying"  [color]="selectedButton === '0' ? 'success' : 'tertiary'" (click)="playAudio('0')"> <b>Preséntate</b></ion-button>
 
           <!-- preguntas frecuentes -->
           <ion-accordion-group expand="inset" class="ion-padding acordion-group-settings">
@@ -42,15 +42,15 @@
               <div class="ion-padding-horizontal" slot="content">
 
                   <ion-list class="ion-padding">
-                      <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('1pg_donde')"><b>¿Dónde trabajaras ahora?</b></ion-button>
+                      <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '1pg_donde' ? 'success' : 'light'" (click)="playAudio('1pg_donde')"><b>¿Dónde trabajaras ahora?</b></ion-button>
 
-                      <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('2pg_transferencia')"><b>¿Qué opinas de tu transferencia tecnológica?</b></ion-button>
+                      <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '2pg_transferencia' ? 'success' : 'light'" (click)="playAudio('2pg_transferencia')"><b>¿Qué opinas de tu transferencia tecnológica?</b></ion-button>
 
-                      <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('3pg_verdenuevo')"><b>¿Dónde te podemos ver?</b></ion-button>
+                      <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '3pg_verdenuevo' ? 'success' : 'light'" (click)="playAudio('3pg_verdenuevo')"><b>¿Dónde te podemos ver?</b></ion-button>
 
-                      <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('4')"><b>¿Qué hacen en los puntos GIRA?</b></ion-button>
+                      <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '4' ? 'success' : 'light'" (click)="playAudio('4')"><b>¿Qué hacen en los puntos GIRA?</b></ion-button>
 
-                      <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('5')"><b>¿Porque es impórtate reciclar?</b></ion-button>
+                      <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '5' ? 'success' : 'light'" (click)="playAudio('5')"><b>¿Porque es impórtate reciclar?</b></ion-button>
                   </ion-list>
 
               </div>
@@ -70,15 +70,15 @@
               <div class="ion-padding-horizontal" slot="content">
 
                 <ion-list class="ion-padding">
-                  <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('6')"><b>¿Qué hace GIRA para promover el reciclaje y cuidado del planeta?</b></ion-button>
+                  <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '6' ? 'success' : 'light'" (click)="playAudio('6')"><b>¿Qué hace GIRA para promover el reciclaje y cuidado del planeta?</b></ion-button>
 
-                  <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('7')"><b>¿Qué opinas de tu transferencia tecnológica?</b></ion-button>
+                  <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '7' ? 'success' : 'light'" (click)="playAudio('7')"><b>¿Qué opinas de tu transferencia tecnológica?</b></ion-button>
 
-                  <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('8')"><b>¿Como puedo ser un Reci Amigo?</b></ion-button>
+                  <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '8' ? 'success' : 'light'" (click)="playAudio('8')"><b>¿Como puedo ser un Reci Amigo?</b></ion-button>
 
-                  <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('9')"><b>¿Como puedo contribuir a estos esfuerzos?</b></ion-button>
+                  <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '9' ? 'success' : 'light'" (click)="playAudio('9')"><b>¿Como puedo contribuir a estos esfuerzos?</b></ion-button>
 
-                  <ion-button expand="block" class="custom-button" color="light" (click)="playAudio('10')"><b>¿Cuándo nos volveremos a ver?</b></ion-button>
+                  <ion-button expand="block" class="custom-button" [disabled]="isPlaying"  [color]="selectedButton === '10' ? 'success' : 'light'" (click)="playAudio('10')"><b>¿Cuándo nos volveremos a ver?</b></ion-button>
               </ion-list>
 
               </div>
