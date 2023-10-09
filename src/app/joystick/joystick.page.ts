@@ -42,6 +42,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   maxLinear: number = 0.08;
   maxAngular: number = 0.10;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
+  isJoystickFollow: boolean = false;
 
   constructor(private ceciTalkService: CeciTalkService, private alertController: AlertController) {
   }
@@ -76,9 +77,12 @@ export class JoystickPage implements AfterViewInit, OnInit {
       this.optionsJoystick = {
         zone: document.getElementById('joystick')!,
         mode: 'static',
-        multitouch: true,
+        position: {left: '50%', top: '50%', bottom: '50%', right: '50%'},
         color: 'blue',
-        size: 130,
+        catchDistance: 150,
+        follow: this.isJoystickFollow,
+        size: 100,
+        threshold: 0.01
       };
 
       //crea el joystick
@@ -116,10 +120,10 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
   // Metodo para actualizar configuracion de joystick
   configJoystick() {
-    if (this.optionsJoystick.size! >= 201 || this.optionsJoystick.size! <= 99) {
-      this.setOpen(true);
-      this.optionsJoystick.size = 100;
-    } else {
+    // if (this.optionsJoystick.size! >= 201 || this.optionsJoystick.size! <= 99) {
+    //   this.setOpen(true);
+    //   this.optionsJoystick.size = 100;
+    // } else {
       this.managerJoystick.destroy();
 
       console.log(this.optionsJoystick);
@@ -144,7 +148,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
         this.angularSpeed = 0.0;
         this.moveRobot(this.linearSpeed, this.angularSpeed);
       });
-    }
+    // }
   }
 
   // Método para mover el robot
@@ -168,10 +172,12 @@ export class JoystickPage implements AfterViewInit, OnInit {
     }
   }
 
+  msj:any = "...";
   //conectar a ROSBridge
  async connect() {
     console.log('connect to ROSBridge ....');
-    var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
+    // var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
+    var newWsAddress = this.ipRobot;
 
     if (!this.ipRobot) {
       const alert = await this.alertController.create({
@@ -181,7 +187,8 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
 
       await alert.present();
-    } else if (!this.port) {
+    }
+    else if (!this.port) {
       const alert = await this.alertController.create({
         header: 'Alert',
         message: 'Se requiere puerto!',
@@ -189,13 +196,16 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
 
       await alert.present();
-    } else {
+    }
+    else {
       this.connecting = true;
       this.wsAddress = newWsAddress;
 
-      this.ros = new ROSLIB.Ros({
-        url: this.wsAddress,
-      });
+      try {
+        this.ros = new ROSLIB.Ros({
+          url: this.wsAddress,
+        });
+
 
       this.ros.on('connection', () => {
         console.log('Connected!');
@@ -204,10 +214,13 @@ export class JoystickPage implements AfterViewInit, OnInit {
         this.setTopic();
         this.reproducirSonido(6)
         this.connecting = false;
+
+        this.msj = "Conectado";
       });
 
       this.ros.on('error', async(error) => {
         console.log('Error connecting to websocket server: ', error);
+        this.msj = error;
 
         const alert = await this.alertController.create({
           header: 'Error',
@@ -227,6 +240,11 @@ export class JoystickPage implements AfterViewInit, OnInit {
         this.connected = false;
         this.connecting = false;
       });
+      } catch (error:any){
+        console.log('Error al conectar: ', error);
+        this.msj = error;
+        this.connecting = false;
+      }
     }
   }
 
@@ -244,12 +262,18 @@ export class JoystickPage implements AfterViewInit, OnInit {
   setTopic(): void {
     if (this.ros) {
 
-      // Suscribirse al topic de velocidad
       this.topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: '/mobile_base/commands/velocity',
-        messageType: 'geometry_msgs/Twist',
+        name: '/turtle1/cmd_vel',
+        messageType: 'geometry_msgs/Twist'
       });
+
+      // Suscribirse al topic de velocidad
+      // this.topic = new ROSLIB.Topic({
+      //   ros: this.ros,
+      //   name: '/mobile_base/commands/velocity',
+      //   messageType: 'geometry_msgs/Twist',
+      // });
 
       // Suscribirse al topic del pitido
       this.topicSound = new ROSLIB.Topic({

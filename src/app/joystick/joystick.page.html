@@ -23,7 +23,7 @@
 
 
     <!-- acordion settings -->
-    <ng-container *ngIf="viewSettings">
+    <ng-container *ngIf="!viewSettings">
       <ion-grid>
         <ion-row>
 
@@ -46,6 +46,9 @@
                   <ion-item>
                     <ion-input label="Puerto"[(ngModel)]="port" type="number" labelPlacement="stacked"></ion-input>
                   </ion-item>
+                  <!-- <ion-item>
+                    <ion-input label="Ws"[(ngModel)]="wsAddress" type="string" labelPlacement="stacked"></ion-input>
+                  </ion-item> -->
 
                    <!-- botones de conexion -->
                   <div style="display: flex; justify-content: center; align-self: center">
@@ -120,6 +123,9 @@
                       [buttons]="alertButtons"
                     ></ion-alert>
                   </ion-item>
+                  <ion-item>
+                    <ion-toggle aria-label="Tertiary toggle" color="tertiary" [(ngModel)]="optionsJoystick.follow">Seguir toque</ion-toggle>
+                  </ion-item>
                   <div style="display: flex; justify-content: center; align-self: center; margin-top: 10px;">
                     <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Aplicar</ion-button>
                   </div>
@@ -140,6 +146,7 @@
     </ng-container>
 
       <ion-grid>
+        {{msj | json}}
 
         <!-- joystick botones -->
         <ion-row>
@@ -197,18 +204,17 @@
 
               <ion-toolbar style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
                 <ion-title class="joystick-btns-header-menu">Joystick</ion-title>
+                <ion-buttons slot="end">
+                  <ion-button size="small" color="tertiary" (click)="configJoystick()">Reset</ion-button>
+                </ion-buttons>
               </ion-toolbar>
 
               <ion-col size="12">
                 <div style="display: flex; align-items: center; justify-content: center;">
                   <div class="joystick-container" id="joystick">
-                    <!-- Flecha Norte -->
                     <div class="arrow north"></div>
-                    <!-- Flecha Sur -->
                     <div class="arrow south"></div>
-                    <!-- Flecha Este -->
                     <div class="arrow east"></div>
-                    <!-- Flecha Oeste -->
                     <div class="arrow west"></div>
                   </div>
                 </div>
@@ -218,9 +224,10 @@
           </ion-grid>
         </ion-row>
 
-       </ion-grid>
-    </div>
+      </ion-grid>
 
+       <!-- <div style="display: flex; justify-content: center; align-items: center; background-color: #80c914;" id="joystick">a</div> -->
+    </div>
 
 </ion-content>
 
