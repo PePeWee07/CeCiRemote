@@ -219,7 +219,6 @@ export class JoystickPage implements AfterViewInit, OnInit {
           this.reproducirSonido(6);
           this.connecting = false;
 
-          this.msj = 'Conectado';
         });
 
         this.ros.on('error', async (error) => {

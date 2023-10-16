@@ -3,10 +3,14 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <div class="container">
-          <ion-list id="inbox-list" class="container-list">
-            <ion-list-header>Menu</ion-list-header>
+          <ion-list style="padding: 0;" id="inbox-list" class="container-list">
+            <div class="menu-title-div">
+              <ion-list-header>
+                <h1 style="font-size: 30px;"><b>Menu</b></h1>
+              </ion-list-header>
+            </div>
 
-            <div style="border: 0.2mm solid rgb(131, 130, 130); margin-top: 10px;"></div>
+            <div style="border: 0.2mm solid rgb(53, 53, 53);"></div>
 
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
               <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
