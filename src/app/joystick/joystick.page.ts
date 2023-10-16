@@ -11,6 +11,8 @@ import { AlertController } from '@ionic/angular';
 
 import { ModalSettingsComponent } from '../modal-settings/modal-settings.component';
 
+import { Clipboard } from '@capacitor/clipboard';
+
 @Component({
   selector: 'app-joystick',
   templateUrl: './joystick.page.html',
@@ -21,14 +23,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
   public alertButtons = ['OK'];
 
   viewSettings: boolean = false;
-  viewJoystick2:boolean = false;
+  viewJoystick2: boolean = false;
 
   //variables para la conexion Ros
   connected = false;
   connecting: boolean = false; //sniper de carga network
   ros: ROSLIB.Ros | null = null;
-  ipRobot: string = "172.16.71.84";
-  port: string = "9090";
+  ipRobot: string = '172.16.71.84';
+  port: string = '9090';
   wsAddress: string | null = 'ws://localhost:9090';
   topic: ROSLIB.Topic | null = null;
   topicSound: ROSLIB.Topic | null = null;
@@ -40,12 +42,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
   angularSpeed: number = 0.0;
   managerJoystick: any;
   maxLinear: number = 0.08;
-  maxAngular: number = 0.10;
+  maxAngular: number = 0.1;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
   isJoystickFollow: boolean = false;
 
-  constructor(private ceciTalkService: CeciTalkService, private alertController: AlertController) {
-  }
+  constructor(
+    private clipboard: Clipboard,
+    private alertController: AlertController
+  ) {}
 
   // Metodo para leer pregunta
   // readQuestion(nombreSonido: string, texto?: string) {
@@ -68,43 +72,44 @@ export class JoystickPage implements AfterViewInit, OnInit {
   //   );
   // }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   // Metodo para renderizar el joystick
   ngAfterViewInit(): void {
-      //configuracion del joystick
-      this.optionsJoystick = {
-        zone: document.getElementById('joystick')!,
-        mode: 'static',
-        position: {left: '50%', top: '50%', bottom: '50%', right: '50%'},
-        color: 'blue',
-        catchDistance: 150,
-        follow: this.isJoystickFollow,
-        size: 100,
-        threshold: 0.01
-      };
+    //configuracion del joystick
+    this.optionsJoystick = {
+      zone: document.getElementById('joystick')!,
+      mode: 'static',
+      position: { left: '50%', top: '50%', bottom: '50%', right: '50%' },
+      color: 'blue',
+      catchDistance: 150,
+      follow: this.isJoystickFollow,
+      size: 100,
+      threshold: 0.01,
+    };
 
-      //crea el joystick
-      this.managerJoystick = nipplejs.create(this.optionsJoystick);
+    //crea el joystick
+    this.managerJoystick = nipplejs.create(this.optionsJoystick);
 
-      // Manejador para el evento 'move' del joystick
-      this.managerJoystick.on('move',  (_event:any, nipple:any) => {
-        // Calcular velocidades en función de la posición del joystick
-        this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
-        this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+    // Manejador para el evento 'move' del joystick
+    this.managerJoystick.on('move', (_event: any, nipple: any) => {
+      // Calcular velocidades en función de la posición del joystick
+      this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
+      this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
 
-        console.log(`linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`);
+      console.log(
+        `linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`
+      );
 
-        this.moveRobot(this.linearSpeed, this.angularSpeed);
-      });
+      this.moveRobot(this.linearSpeed, this.angularSpeed);
+    });
 
-      // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
-      this.managerJoystick.on('end',  () => {
-        this.linearSpeed = 0.0;
-        this.angularSpeed = 0.0;
-        this.moveRobot(this.linearSpeed, this.angularSpeed);
-      });
+    // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
+    this.managerJoystick.on('end', () => {
+      this.linearSpeed = 0.0;
+      this.angularSpeed = 0.0;
+      this.moveRobot(this.linearSpeed, this.angularSpeed);
+    });
   }
 
   //Tostada para validaciones de campo de velocidades de Joystick
@@ -124,57 +129,59 @@ export class JoystickPage implements AfterViewInit, OnInit {
     //   this.setOpen(true);
     //   this.optionsJoystick.size = 100;
     // } else {
-      this.managerJoystick.destroy();
+    this.managerJoystick.destroy();
 
-      console.log(this.optionsJoystick);
+    console.log(this.optionsJoystick);
 
-      this.managerJoystick = nipplejs.create(this.optionsJoystick);
-      this.setOpen2(true);
+    this.managerJoystick = nipplejs.create(this.optionsJoystick);
+    this.setOpen2(true);
 
-      // Manejador para el evento 'move' del joystick
-      this.managerJoystick.on('move',  (_event:any, nipple:any) => {
-        // Calcular velocidades en función de la posición del joystick
-        this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
-        this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+    // Manejador para el evento 'move' del joystick
+    this.managerJoystick.on('move', (_event: any, nipple: any) => {
+      // Calcular velocidades en función de la posición del joystick
+      this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
+      this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
 
-        console.log(`linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`);
+      console.log(
+        `linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed}, maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`
+      );
 
-        this.moveRobot(this.linearSpeed, this.angularSpeed);
-      });
+      this.moveRobot(this.linearSpeed, this.angularSpeed);
+    });
 
-      // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
-      this.managerJoystick.on('end',  () => {
-        this.linearSpeed = 0.0;
-        this.angularSpeed = 0.0;
-        this.moveRobot(this.linearSpeed, this.angularSpeed);
-      });
+    // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
+    this.managerJoystick.on('end', () => {
+      this.linearSpeed = 0.0;
+      this.angularSpeed = 0.0;
+      this.moveRobot(this.linearSpeed, this.angularSpeed);
+    });
     // }
   }
 
   // Método para mover el robot
-  moveRobot(linear: number, angular:number) {
+  moveRobot(linear: number, angular: number) {
     var twist = new ROSLIB.Message({
-        linear: {
-            x: linear,
-            y: 0.0,
-            z: 0.0
-        },
-        angular: {
-            x: 0.0,
-            y: 0.0,
-            z: angular
-        }
+      linear: {
+        x: linear,
+        y: 0.0,
+        z: 0.0,
+      },
+      angular: {
+        x: 0.0,
+        y: 0.0,
+        z: angular,
+      },
     });
-    if (this.topic){
+    if (this.topic) {
       this.topic!.publish(twist);
-    }else{
+    } else {
       console.log('Topic not set, you neeed to connect to ROSBridge first.');
     }
   }
 
-  msj:any = "...";
+  msj: any;
   //conectar a ROSBridge
- async connect() {
+  async connect() {
     console.log('connect to ROSBridge ....');
     // var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
     var newWsAddress = this.ipRobot;
@@ -187,8 +194,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
 
       await alert.present();
-    }
-    else if (!this.port) {
+    } else if (!this.port) {
       const alert = await this.alertController.create({
         header: 'Alert',
         message: 'Se requiere puerto!',
@@ -196,8 +202,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
 
       await alert.present();
-    }
-    else {
+    } else {
       this.connecting = true;
       this.wsAddress = newWsAddress;
 
@@ -206,41 +211,40 @@ export class JoystickPage implements AfterViewInit, OnInit {
           url: this.wsAddress,
         });
 
+        this.ros.on('connection', () => {
+          console.log('Connected!');
 
-      this.ros.on('connection', () => {
-        console.log('Connected!');
+          this.connected = true;
+          this.setTopic();
+          this.reproducirSonido(6);
+          this.connecting = false;
 
-        this.connected = true;
-        this.setTopic();
-        this.reproducirSonido(6)
-        this.connecting = false;
-
-        this.msj = "Conectado";
-      });
-
-      this.ros.on('error', async(error) => {
-        console.log('Error connecting to websocket server: ', error);
-        this.msj = error;
-
-        const alert = await this.alertController.create({
-          header: 'Error',
-          subHeader: 'Error al conectar',
-          message: 'Compruebe si IP y Puerto son correctos.',
-          buttons: ['OK'],
+          this.msj = 'Conectado';
         });
 
-        await alert.present();
+        this.ros.on('error', async (error) => {
+          console.log('Error connecting to websocket server: ', error);
+          this.msj = error;
 
-        this.connected = false;
-        this.connecting = false;
-      });
+          const alert = await this.alertController.create({
+            header: 'Error',
+            subHeader: 'Error al conectar',
+            message: 'Compruebe si IP y Puerto son correctos.',
+            buttons: ['OK'],
+          });
 
-      this.ros.on('close', () => {
-        console.log('Connection to websocket server closed.');
-        this.connected = false;
-        this.connecting = false;
-      });
-      } catch (error:any){
+          await alert.present();
+
+          this.connected = false;
+          this.connecting = false;
+        });
+
+        this.ros.on('close', () => {
+          console.log('Connection to websocket server closed.');
+          this.connected = false;
+          this.connecting = false;
+        });
+      } catch (error: any) {
         console.log('Error al conectar: ', error);
         this.msj = error;
         this.connecting = false;
@@ -251,7 +255,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   //desconectar de ROSBridge
   disconnect(): void {
     if (this.ros) {
-      this.reproducirSonido(5)
+      this.reproducirSonido(5);
       this.ros.close();
       this.batteryTopic!.unsubscribe();
       console.log('Disconnected from ROSBridge.');
@@ -261,11 +265,10 @@ export class JoystickPage implements AfterViewInit, OnInit {
   // Método para establecer el topic
   setTopic(): void {
     if (this.ros) {
-
       this.topic = new ROSLIB.Topic({
         ros: this.ros,
         name: '/turtle1/cmd_vel',
-        messageType: 'geometry_msgs/Twist'
+        messageType: 'geometry_msgs/Twist',
       });
 
       // Suscribirse al topic de velocidad
@@ -323,7 +326,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
 
       console.log('Topic sets');
-    }else{
+    } else {
       console.log('Topic not set');
     }
   }
@@ -331,17 +334,16 @@ export class JoystickPage implements AfterViewInit, OnInit {
   // Metodo de sonido al coneccion exitosa (pitidos del robot)
   reproducirSonido(tipoSonido: number): void {
     const soundMessage = new ROSLIB.Message({
-      value: tipoSonido  // el tipoSonido corresponde al tipo de sonido que deseas reproducir
+      value: tipoSonido, // el tipoSonido corresponde al tipo de sonido que deseas reproducir
     });
 
     // Publica el mensaje en el tópico de sonido
     if (this.topicSound) {
       this.topicSound.publish(soundMessage);
-    }else{
+    } else {
       console.log('Topic sound no set');
     }
   }
-
 
   // Método para avanzar
   goForward(): void {
@@ -360,14 +362,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
       this.topic.publish(this.message);
       console.log('Sent Forward command.');
-    } else{
+    } else {
       console.log('Topic move no set');
     }
   }
 
   // Método para girar a la izquierda
   goLeft(): void {
-    if(this.topic){
+    if (this.topic) {
       this.message = new ROSLIB.Message({
         linear: {
           x: this.maxLinear,
@@ -382,14 +384,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
       this.topic!.publish(this.message);
       console.log('Sent Left command.');
-    }else{
+    } else {
       console.log('Topic move no set');
     }
   }
 
   // Método para girar a la derecha
   goRight(): void {
-    if(this.topic){
+    if (this.topic) {
       this.message = new ROSLIB.Message({
         linear: {
           x: this.maxLinear,
@@ -404,14 +406,14 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
       this.topic!.publish(this.message);
       console.log('Sent Right command.');
-    }else{
-        console.log('Topic move no set');
-      }
+    } else {
+      console.log('Topic move no set');
+    }
   }
 
   // Método para retroceder
   goBack(): void {
-    if(this.topic){
+    if (this.topic) {
       this.message = new ROSLIB.Message({
         linear: {
           x: -this.maxLinear,
@@ -426,9 +428,9 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
       this.topic!.publish(this.message);
       console.log('Sent Back command.');
-    }else{
-        console.log('Topic move no set');
-      }
+    } else {
+      console.log('Topic move no set');
+    }
   }
 
   // Método para detener el movimiento
@@ -448,8 +450,52 @@ export class JoystickPage implements AfterViewInit, OnInit {
       });
       this.topic.publish(this.message);
       console.log('Sent Stop command.');
-    }else{
+    } else {
       console.log('Topic move no set');
+    }
+  }
+
+
+  isToastOpenClipBoard = false;
+  isToastOpenClipBoardError = false;
+
+  setOpenToastClipBoard(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+  setOpenToastClipBoardError(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  copiarAlPortapapeles() {
+    if (Clipboard.write) {
+
+      try {
+        //Para copiar en la app
+          Clipboard.write({
+            string: JSON.stringify(this.msj),
+          });
+        //Para cerrar el mensaje
+        setTimeout(() => {
+          this.msj = null;
+        }, 1000);
+        this.isToastOpenClipBoard = true;
+      } catch (error) {
+        console.error("Error al copiar al portapapeles: ", error);
+        this.isToastOpenClipBoardError = true;
+      }
+
+    } else {
+      //Para copiar en el navegador
+      try {
+        navigator.clipboard.writeText(JSON.stringify(this.msj));
+        //Para cerrar el mensaje
+        setTimeout(() => {
+          this.msj = null;
+        }, 1000);
+        this.isToastOpenClipBoard = true;
+      } catch (error) {
+        console.error("Error al copiar al portapapeles del navegador: ", error);
+      }
     }
   }
 }

@@ -87,16 +87,44 @@ export class PreguntasPage implements OnInit {
 
 mensaje: string = "No se conecto a FLASK";
   ngOnInit() {
-    this.ceciTalkService.getHelloWorldMessage().subscribe(
-      (data:any) => {
-      this.mensaje = data.message;
-    }, (error:any) => {
-        console.log("FLak-Error: ", error);
-        this.mensaje = error
-    }, () => {
-      console.log("FLak-Complete");
-    }
-    );
+    // this.ceciTalkService.getHelloWorldMessage().subscribe(
+    //   (data:any) => {
+    //   this.mensaje = data.message;
+    // }, (error:any) => {
+    //     console.log("FLak-Error: ", error);
+    //     this.mensaje = error
+    // }, () => {
+    //   console.log("FLak-Complete");
+    // }
+    // );
   }
+
+  //zona de pruebas
+  cnx: boolean = false;
+  msj: any = "No hay conexión";
+  error: any = null;
+  youIp: string = "";
+  getTest() {
+    try {
+      this.ceciTalkService.getTest2(this.youIp).subscribe({
+        next: (data) => {
+          this.cnx = true;
+          this.msj = data;
+          this.error = null;
+
+        },
+        error: (error) => {
+          this.cnx = false;
+          this.msj = error;
+          this.error = error;
+        }
+      });
+    } catch (error) {
+      this.cnx = false;
+      this.error = error;
+    }
+
+  }
+
 
 }

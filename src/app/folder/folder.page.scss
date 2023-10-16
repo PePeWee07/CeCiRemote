@@ -20,9 +20,9 @@ background-size: cover;
 
 @keyframes entradaDesdeIzquierda {
   0% {
-    transform: translateX(-100%); /* Posición inicial fuera del área visible (izquierda) */
+    transform: translateX(-100%);
   }
   100% {
-    transform: translateX(0); /* Posición final, en su lugar original */
+    transform: translateX(0); 
   }
 }

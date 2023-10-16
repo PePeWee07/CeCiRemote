@@ -10,7 +10,6 @@ export class CeciTalkService {
   constructor(private _http: HttpClient) { }
 
   Url = 'http://172.16.71.84:5000';
-  // Url = 'http://10.0.2.3:5000';
 
 
   reproducirSonido2(nombreSonido: string) {
@@ -19,6 +18,11 @@ export class CeciTalkService {
 
   getHelloWorldMessage() {
     return this._http.get(this.Url+'/hola');
+  }
+
+  //Zona de pruebas
+  getTest2(url: string) {
+    return this._http.get(url);
   }
 
 }
