@@ -1,11 +1,9 @@
-import { ReadQuestionService } from './../service/read-question.service';
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 
 import * as ROSLIB from 'roslib';
 import * as nipplejs from 'nipplejs';
 
-import { ModalController } from '@ionic/angular';
-import { CeciTalkService } from '../service/ceci-talk.service';
+
 import { IonModal } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 
@@ -51,27 +49,6 @@ export class JoystickPage implements AfterViewInit, OnInit {
     private alertController: AlertController
   ) {}
 
-  // Metodo para leer pregunta
-  // readQuestion(nombreSonido: string, texto?: string) {
-  //   if (texto) {
-  //     const utterance = new SpeechSynthesisUtterance(texto);
-  //     utterance.onend = () => {
-  //       this.CeCiTalk(nombreSonido);
-  //     };
-  //     speechSynthesis.speak(utterance);
-  //   }
-
-  // }
-
-  // //Metodo para reproducir Mp3 de CeCi
-  // CeCiTalk(nombreSonido: string) {
-  //   this.ceciTalkService.reproducirSonido2(nombreSonido)
-  //   .subscribe(
-  //     response => console.log(response), // Maneja la respuesta del servidor
-  //     error => console.error("Alerta: ",error) // Maneja cualquier error
-  //   );
-  // }
-
   ngOnInit() {}
 
   // Metodo para renderizar el joystick
@@ -81,7 +58,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       zone: document.getElementById('joystick')!,
       mode: 'static',
       position: { left: '50%', top: '50%', bottom: '50%', right: '50%' },
-      color: 'blue',
+      color: 'red',
       catchDistance: 150,
       follow: this.isJoystickFollow,
       size: 100,
@@ -183,8 +160,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   //conectar a ROSBridge
   async connect() {
     console.log('connect to ROSBridge ....');
-    // var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
-    var newWsAddress = this.ipRobot;
+    var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
 
     if (!this.ipRobot) {
       const alert = await this.alertController.create({
@@ -264,18 +240,18 @@ export class JoystickPage implements AfterViewInit, OnInit {
   // Método para establecer el topic
   setTopic(): void {
     if (this.ros) {
-      this.topic = new ROSLIB.Topic({
-        ros: this.ros,
-        name: '/turtle1/cmd_vel',
-        messageType: 'geometry_msgs/Twist',
-      });
-
-      // Suscribirse al topic de velocidad
       // this.topic = new ROSLIB.Topic({
       //   ros: this.ros,
-      //   name: '/mobile_base/commands/velocity',
+      //   name: '/turtle1/cmd_vel',
       //   messageType: 'geometry_msgs/Twist',
       // });
+
+      //Suscribirse al topic de velocidad
+      this.topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: '/mobile_base/commands/velocity',
+        messageType: 'geometry_msgs/Twist',
+      });
 
       // Suscribirse al topic del pitido
       this.topicSound = new ROSLIB.Topic({

@@ -10,6 +10,10 @@
 
 <ion-content [fullscreen]="true">
 
+  <!-- <div>
+    <ion-button size="samll" color="danger" (click)="CeCiTalk2('0')">prueba</ion-button>
+  </div> -->
+
   <div class="container">
 
     <div class="robot-title ion-padding-top" style="display: flex; justify-content: center; align-items: center;">
@@ -30,25 +34,7 @@
 
         <ion-col size="12">
 
-          <!-- <div style="display: inline-flex;">
-            <h4 class="ion-padding">Conexion: </h4> <h1 [style.color]="cnx ? 'green': 'red'">{{cnx}}</h1>
-          </div>
 
-          <ion-item>
-            <ion-input label="Http Request: "[(ngModel)]="youIp" type="string" labelPlacement="stacked"></ion-input>
-          </ion-item>
-          <ion-button (click)="getTest()" color="warning" size="small">Test</ion-button>
-
-          <div *ngIf="!error" class="ion-padding">
-          </div>
-          <p>{{msj | json}}</p>
-
-          <div *ngIf="error" class="ion-padding">
-            <h3>Error:</h3>
-            <p>{{error | json}}</p>
-          </div> -->
-
-          <!-- <h3>{{mensaje | json}}</h3> -->
             <ion-button expand="block" class="custom-button ion-padding-bottom" [disabled]="isPlaying"  [color]="selectedButton === '0' ? 'success' : 'tertiary'" (click)="playAudio('0')"> <b>Preséntate</b></ion-button>
 
           <!-- preguntas frecuentes -->

@@ -9,6 +9,7 @@
  <domain-config cleartextTrafficPermitted="true">
   <domain includeSubdomains="true">localhost</domain>
 	  <domain includeSubdomains="true">192.168.1.9</domain>
+	  <domain includeSubdomains="true">172.16.71.84</domain>
 	   <domain includeSubdomains="true">http://192.168.1.9:5000/hola</domain>
 	</domain-config>
 	</network-security-config>
