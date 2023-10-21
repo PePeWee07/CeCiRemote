@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHeaders } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +14,5 @@ export class CeciTalkService {
   reproducirSonido(nombreSonido: string) {
     return this._http.get(`${this.Url}/reproducir_sonido/${nombreSonido}`);
   }
-
-
-
-
 
 }

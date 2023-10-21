@@ -26,14 +26,14 @@
     <ng-container *ngIf="viewSettings">
       <ion-grid>
         <ion-row>
-
+          <!-- columna 1 genera un espacion entre el boton desde la izquierda y el acordion -->
           <ion-col size="2">
           </ion-col>
-
+          <!-- col 2 contiene el acordion -->
           <ion-col size="10" >
             <h5 class="ion-text-center"> <b>Configuración</b> </h5>
-
             <ion-accordion-group class="acordion-group-settings" expand="inset" [value]="['first']">
+              <!-- primer acordion de configuracion de Ip y puerto -->
               <ion-accordion value="first">
                 <ion-item slot="header" class="item-header-settings">
                   <ion-icon name="logo-rss" size="small"></ion-icon>
@@ -46,10 +46,6 @@
                   <ion-item>
                     <ion-input label="Puerto"[(ngModel)]="port" type="number" labelPlacement="stacked"></ion-input>
                   </ion-item>
-                  <!-- <ion-item>
-                    <ion-input label="Ws"[(ngModel)]="wsAddress" type="string" labelPlacement="stacked"></ion-input>
-                  </ion-item> -->
-
                    <!-- botones de conexion -->
                   <div style="display: flex; justify-content: center; align-self: center">
                     <div *ngIf="!connected" style="margin-top: 10px;">
@@ -61,41 +57,8 @@
                   </div>
                 </div>
               </ion-accordion>
-              <!-- <ion-accordion value="second">
-                <ion-item slot="header" color="light">
-                  <ion-icon name="hammer" size="small"></ion-icon>
-                  <ion-label>Personalizar Joystick</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-
-                  <ion-item>
-                    <ion-select label="Modo" label-placement="stacked" placeholder="Select mode" [(ngModel)]="optionsJoystick.mode">
-                      <ion-select-option value="static">Static</ion-select-option>
-                      <ion-select-option value="dynamic">Dynamic</ion-select-option>
-                      <ion-select-option value="semi">Semi</ion-select-option>
-                    </ion-select>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-input label="Color" [(ngModel)]="optionsJoystick.color" type="color" labelPlacement="stacked"></ion-input>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-input type="number" pattern="[0-9]*" min="100" max="200" placeholder="min: 100 - max:200" label="Tamaño"[(ngModel)]="optionsJoystick.size" labelPlacement="stacked"></ion-input>
-                  </ion-item>
-
-                  <div style="display: flex; justify-content: center; align-self: center; margin-top: 10px;">
-                    <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Aplicar</ion-button>
-                  </div>
-                  <ion-toast
-                    [isOpen]="isToastOpen"
-                    message="Tamaño minimo 100 y maximo 200"
-                    [duration]="3000"
-                    (didDismiss)="setOpen(false)"
-                  ></ion-toast>
-                </div>
-              </ion-accordion> -->
-              <ion-accordion value="third">
+              <!-- segundo acordion de configuracion de velocidad lineal y angular -->
+              <ion-accordion value="second">
                 <ion-item slot="header" class="item-header-settings">
                   <ion-icon name="walk" size="small"></ion-icon>
                   <ion-label>Velocidad</ion-label>
@@ -126,18 +89,18 @@
                   <ion-item>
                     <ion-toggle aria-label="Tertiary toggle" color="tertiary" [(ngModel)]="optionsJoystick.follow">Seguir toque</ion-toggle>
                   </ion-item>
+                  <!-- boton de actualizar -->
                   <div style="display: flex; justify-content: center; align-self: center; margin-top: 10px;">
                     <ion-button size="small" shape="round" color="warning" (click)="configJoystick()">Aplicar</ion-button>
                   </div>
                 </div>
               </ion-accordion>
             </ion-accordion-group>
-
             <ion-toast
                 [isOpen]="isToastOpen"
                 message="Joystick actualizado"
-                [duration]="2000"
-                (didDismiss)="setOpen2(false)"
+                [duration]="3000"
+                (didDismiss)="setOpenUpdateJoystick(false)"
             ></ion-toast>
           </ion-col>
 
@@ -164,7 +127,13 @@
           [isOpen]="isToastOpenClipBoard"
           message="Contenido copiado al portapapeles"
           [duration]="3000"
-          (didDismiss)="setOpen(false)"
+          (didDismiss)="setOpenToastClipBoard(false)"
+        ></ion-toast>
+        <ion-toast
+          [isOpen]="isToastOpenClipBoard"
+          message="Contenido copiado al portapapeles"
+          [duration]="3000"
+          (didDismiss)="setOpenToastClipBoardError(false)"
         ></ion-toast>
 
         <!-- joystick botones -->
@@ -253,21 +222,9 @@
   <ion-toolbar class="footer-style">
     <ion-grid >
       <ion-row>
-        <!-- bateria -->
-        <!-- <ion-col size="6">
-          <div style="display: flex; justify-content: start;">
-            <ion-item style="border-radius: 10px;">
-              <h6>Bateria: </h6>
-              <ion-icon style="color: cadetblue;" name="battery-charging"></ion-icon>
-              <ion-icon style="color: #c91414;" name="battery-dead"></ion-icon>
-              <ion-icon style="color: #80c914;" name="battery-full"></ion-icon>
-            </ion-item>
-          </div>
-        </ion-col> -->
         <ion-col size="6">
             <!-- cnx -->
             <div style="display: flex; justify-content: start;">
-
               <div *ngIf="!connecting" class="cnx-style">
                 <ion-item style="border-radius: 10px;">
                   <h6> <b>Conexión:</b> </h6>
@@ -279,14 +236,12 @@
                     </div>
                 </ion-item>
               </div>
-
               <div *ngIf="connecting" class="cnx-style">
                 <ion-item style="border-radius: 10px;">
                   <h6> <b>Conexión:</b> </h6>
                   <ion-spinner *ngIf="connecting"></ion-spinner>
                 </ion-item>
               </div>
-
             </div>
         </ion-col>
       </ion-row>

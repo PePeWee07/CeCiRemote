@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CeciTalkService } from '../service/ceci-talk.service';
 import { Howl } from 'howler';
 
@@ -70,27 +70,7 @@ export class PreguntasPage implements OnInit {
     );
   }
 
-
-
-
-  // Metodo para leer pregunta
-  readQuestion(nombreSonido: string, texto?: string) {
-    if (texto) {
-      const utterance = new SpeechSynthesisUtterance(texto);
-      utterance.onend = () => {
-        this.CeCiTalk(nombreSonido);
-      };
-      speechSynthesis.speak(utterance);
-    }
-
-  }
-
   ngOnInit() {
   }
-
-
-
-  
-
 
 }
