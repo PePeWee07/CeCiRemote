@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  defaultIP: '172.16.71.84'
 };

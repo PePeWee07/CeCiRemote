@@ -6,8 +6,8 @@ import * as nipplejs from 'nipplejs';
 import { AlertController } from '@ionic/angular';
 
 import { Clipboard } from '@capacitor/clipboard';
-import { environment } from 'src/environments/environment';
 import { Preferences } from '@capacitor/preferences';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-joystick',

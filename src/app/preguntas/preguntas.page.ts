@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CeciTalkService } from '../service/ceci-talk.service';
 import { Howl } from 'howler';
-import { environment } from 'src/environments/environment';
 import { Preferences } from '@capacitor/preferences';
 import { Clipboard } from '@capacitor/clipboard';
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
