@@ -7,10 +7,10 @@ background-size: cover;
 }
 ion-item{
   --background: #ffda56c2;
-  padding-block: 1px;
+  padding-block: 0.5px;
 }
 ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #ffda5679));
+ --background: var(--ion-item-background, var(--ion-background-color, #ffda5679));
 }
 
 ion-menu.md ion-content {

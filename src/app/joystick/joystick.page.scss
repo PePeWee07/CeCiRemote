@@ -93,12 +93,20 @@ ion-menu-button {
 }
 
 
+@keyframes entradaDesdeIzquierda {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 
 // Style settings
 .acordion-group-settings
 {
-  animation-name: example;
-  animation-duration: 1.5s;
+  animation: entradaDesdeIzquierda 1s ease forwards;
   border-radius: 10px;
   box-shadow: 0 0 15px $color-primary;
 }

@@ -3,6 +3,8 @@ import { CeciTalkService } from '../service/ceci-talk.service';
 import { Howl } from 'howler';
 import { environment } from 'src/environments/environment';
 import { Preferences } from '@capacitor/preferences';
+import { Clipboard } from '@capacitor/clipboard';
+
 
 @Component({
   selector: 'app-preguntas',
@@ -94,7 +96,10 @@ export class PreguntasPage implements OnInit {
 
       this.ceciTalkService.reproducirSonido2(nombreSonido, fullIp).subscribe(
         (response) => console.log(response),
-        (error) => console.error('Alerta: ', error)
+        (error) =>{
+           console.error('Alerta: ', error)
+          this.msj = error;
+     }
       );
   }
 
@@ -108,4 +113,51 @@ export class PreguntasPage implements OnInit {
         return this.ip = environment.defaultIP;
       }
   }
+
+  msj: any;
+  isToastOpen = false;
+   //tostada de copiado al portapapeles
+   isToastOpenClipBoard = false;
+   setOpenToastClipBoard(isOpen: boolean) {
+     this.isToastOpen = isOpen;
+   }
+
+   // tostada de error al copiar al portapapeles
+   isToastOpenClipBoardError = false;
+   setOpenToastClipBoardError(isOpen: boolean) {
+     this.isToastOpen = isOpen;
+   }
+
+   // Metodo para copiar al portapapeles
+   copiarAlPortapapeles() {
+     if (Clipboard.write) {
+       try {
+         //Para copiar en la app
+         Clipboard.write({
+           string: JSON.stringify(this.msj),
+         });
+         //Para cerrar el mensaje
+         setTimeout(() => {
+           this.msj = null;
+         }, 1000);
+         this.isToastOpenClipBoard = true;
+       } catch (error) {
+         console.error('Error al copiar al portapapeles: ', error);
+         this.setOpenToastClipBoardError(true);
+       }
+     } else {
+       //Para copiar en el navegador
+       try {
+         navigator.clipboard.writeText(JSON.stringify(this.msj));
+         //Para cerrar el mensaje
+         setTimeout(() => {
+           this.msj = null;
+         }, 1000);
+         this.isToastOpenClipBoard = true;
+       } catch (error) {
+         console.error('Error al copiar al portapapeles del navegador: ', error);
+         this.setOpenToastClipBoardError(true);
+       }
+     }
+   }
 }

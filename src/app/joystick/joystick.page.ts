@@ -56,7 +56,6 @@ export class JoystickPage implements AfterViewInit, OnInit {
         this.connect();
       } else {
         this.ipRobot = environment.defaultIP;
-        this.connect();
       }
   }
 
