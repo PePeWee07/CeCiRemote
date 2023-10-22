@@ -103,3 +103,22 @@ ion-list{
   background-attachment: fixed;
   background-size: cover;
 }
+
+.animation-cnx ion-item{
+  border-radius: 10px;
+  margin-block: 5px;
+}
+
+.animation-cnx{
+  animation: entradaDesdeIzquierda 1s ease forwards;
+}
+
+
+@keyframes entradaDesdeIzquierda {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

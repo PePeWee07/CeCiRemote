@@ -6,6 +6,8 @@ import * as nipplejs from 'nipplejs';
 import { AlertController } from '@ionic/angular';
 
 import { Clipboard } from '@capacitor/clipboard';
+import { environment } from 'src/environments/environment';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-joystick',
@@ -15,13 +17,22 @@ import { Clipboard } from '@capacitor/clipboard';
 export class JoystickPage implements AfterViewInit, OnInit {
   viewSettings: boolean = false;
 
+  //botones de informacion de velocidad lineal y angular
+  alertButtons = [
+    {
+      text: 'Aceptar',
+      handler: () => {
+        // Manejar la lógica cuando se hace clic en Aceptar
+      }
+    },
+  ];
+
   //variables para la conexion Ros
   connected = false;
   connecting: boolean = false; //sniper de carga network
   ros: ROSLIB.Ros | null = null;
-  ipRobot: string = '172.16.71.84';
+  ipRobot: string;
   port: string = '9090';
-  wsAddress: string | null = 'ws://localhost:9090';
   topic: ROSLIB.Topic | null = null;
   topicSound: ROSLIB.Topic | null = null;
   message: ROSLIB.Message | null = null;
@@ -37,7 +48,17 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
   constructor(private alertController: AlertController) {}
 
-  ngOnInit() {}
+ async ngOnInit() {
+    const { value } = await Preferences.get({ key: 'ipDefault' });
+      console.log('ipDefault: ', value);
+      if (value) {
+        this.ipRobot = value!;
+        this.connect();
+      } else {
+        this.ipRobot = environment.defaultIP;
+        this.connect();
+      }
+  }
 
   // Metodo para renderizar el joystick
   ngAfterViewInit(): void {
@@ -157,8 +178,15 @@ export class JoystickPage implements AfterViewInit, OnInit {
   msj: any;
   //conectar a ROSBridge
   async connect() {
-    console.log('connect to ROSBridge ....');
-    var newWsAddress = 'ws://' + this.ipRobot + ':' + this.port;
+    this.msj = null;
+
+    Preferences.set({ key: 'ipDefault', value: this.ipRobot });
+    const { value } = await Preferences.get({ key: 'ipDefault' });
+    console.log('ipDefault: ', value);
+
+    var newWsAddress = 'ws://' + value + ':' + this.port;
+    console.log('newWsAddress: ', newWsAddress);
+
 
     if (!this.ipRobot) {
       const alert = await this.alertController.create({
@@ -178,11 +206,10 @@ export class JoystickPage implements AfterViewInit, OnInit {
       await alert.present();
     } else {
       this.connecting = true;
-      this.wsAddress = newWsAddress;
 
       try {
         this.ros = new ROSLIB.Ros({
-          url: this.wsAddress,
+          url: newWsAddress,
         });
 
         this.ros.on('connection', () => {

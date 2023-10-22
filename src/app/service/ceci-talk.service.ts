@@ -8,11 +8,8 @@ export class CeciTalkService {
 
   constructor(private _http: HttpClient) { }
 
-  Url = 'http://172.16.71.84:5000';
-
-
-  reproducirSonido(nombreSonido: string) {
-    return this._http.get(`${this.Url}/reproducir_sonido/${nombreSonido}`);
+  reproducirSonido2(nombreSonido: string, ip?: string) {
+    return this._http.get(`http://${ip}/reproducir_sonido/${nombreSonido}`);
   }
 
 }

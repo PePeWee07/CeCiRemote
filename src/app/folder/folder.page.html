@@ -12,13 +12,20 @@
   <div id="container">
     <div style="display: flex; justify-content: center; align-items: center;" class="welcome-content">
       <div style="margin-top: 10%;">
-        <div class="app-description">
+
+        <div *ngIf="showSecretButton" class="app-description ion-margin-bottom" >
+          <h2>Bienvenido Desarrollador 💻</h2>
+            <ion-button size="small" color="danger" (click)="deleteStorage()"> Eliminar LocalStorage</ion-button> <br>
+            <ion-button size="small" color="success" (click)="showSecretButton = !showSecretButton"> Cerrar</ion-button>
+        </div>
+
+        <div class="app-description" *ngIf="!showSecretButton">
           <h2 style="margin: 0"><b>Bienvenido</b></h2>
           <b>
             <p class="ion-padding">Controla a CeCi y embárcate en aventuras robóticas emocionantes con nuestro joystick personalizado.</p>
           </b>
         </div>
-        <img src="../../assets/img/hola_robot.svg" alt="Pokemon logo" />
+        <img src="../../assets/img/ceci.png" (click)="handleEasterEggClick()" width="300px" height="500px" alt="ceci robot" />
 
       </div>
     </div>

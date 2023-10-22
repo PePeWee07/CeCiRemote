@@ -1,25 +1,47 @@
 
 <div>
   <ion-toolbar>
-    <ion-title class="header-menu">Pregunta</ion-title>
+    <ion-title class="header-menu">Preguntas</ion-title>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </div>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="false">
 
   <div class="container">
+     <!-- btn settings -->
+     <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
+      <ion-fab-button size="small"  [color]="viewSettings ? 'warning' : 'medium'">
+        <ion-icon name="cog" style="font-size: 22px"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-grid *ngIf="viewSettings">
+      <ion-row class="ion-justify-content-end">
+        <div class="animation-cnx">
+          <h6 class="ion-text-center">Ajustes de Conexión</h6>
+          <!-- Ip -->
+          <ion-item>
+            <ion-input label="IP"[(ngModel)]="ip" type="string" labelPlacement="stacked"></ion-input>
+          </ion-item>
+          <!-- Puerto -->
+          <ion-item>
+            <ion-input label="Puerto"[(ngModel)]="port" type="number" labelPlacement="stacked"></ion-input>
+          </ion-item>
+        </div>
+      </ion-row>
+    </ion-grid>
 
     <div class="robot-title ion-padding-top" style="display: flex; justify-content: center; align-items: center;">
         <h2><b>¡Hazme una pregunta!</b></h2>
     </div>
     <div class="img-robot">
       <div class="img-robot-center">
-        <ion-img style="height: 200px; width: 200px;"
-        src="../../assets/img/robot2.svg"
-        alt="The W"
+        <ion-img style="height: 250px; width: 250px;"
+        src="../../assets/img/ceci.png"
+        alt="Ceci robot"
         ></ion-img>
       </div>
     </div>
