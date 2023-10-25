@@ -148,37 +148,42 @@
 
               <div class="joystick-btns-content" >
 
-                <div style="display: flex; justify-content: center; align-items: center; margin-top: 5%;">
-                  <ion-col size="3" class="ion-text-center">
-                    <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">
-                      <ion-icon name="arrow-up"></ion-icon>
-                    </ion-button>
-                  </ion-col>
 
-                  <ion-col size="3" class="ion-text-center">
-                    <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">
-                      <ion-icon name="arrow-back"></ion-icon>
-                    </ion-button>
-                  </ion-col>
+                  <ion-row class="ion-justify-content-center">
+                    <ion-col size="12" class="ion-text-center">
+                      <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">
+                        <ion-icon name="arrow-up"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
 
-                  <ion-col size="3" class="ion-text-center">
-                    <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
-                  </ion-col>
+                  <ion-row>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">
+                        <ion-icon name="arrow-back"></ion-icon>
+                      </ion-button>
+                    </ion-col>
 
-                  <ion-col size="3" class="ion-text-center">
-                    <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">
-                      <ion-icon name="arrow-forward"></ion-icon>
-                    </ion-button>
-                  </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
+                    </ion-col>
 
-                  <ion-col size="3" class="ion-text-center">
-                    <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">
-                      <ion-icon name="arrow-down"></ion-icon>
-                    </ion-button>
-                  </ion-col>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">
+                        <ion-icon name="arrow-forward"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+
+                  <ion-row class="ion-justify-content-center">
+                    <ion-col size="12" class="ion-text-center">
+                      <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">
+                        <ion-icon name="arrow-down"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
                 </div>
 
-              </div>
 
             </ion-row>
 
