@@ -48,9 +48,6 @@ export class PreguntasPage implements OnInit {
       src: ['../../assets/audios/8iniciativa_PG.mp3'],
     });
     this.sounds['9'] = new Howl({
-      src: ['../../assets/audios/9esfuerzos_PG.mp3'],
-    });
-    this.sounds['10'] = new Howl({
       src: ['../../assets/audios/10volveraVer_PG.mp3'],
     });
 
