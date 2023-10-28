@@ -157,4 +157,22 @@ export class PreguntasPage implements OnInit {
        }
      }
    }
+
+easterEggClickCount = 0;
+//Muestra configuraciones de cnx
+handleEasterEggClick() {
+  this.easterEggClickCount++;
+
+  if (this.easterEggClickCount === 5) {
+    this.showSecretButton = true;
+    this.easterEggClickCount = 0;
+  }
+}
+showSecretButton = false;
+
+toggleActions() {
+  this.showSecretButton = !this.showSecretButton;
+  this.viewSettings = !this.viewSettings;
+}
+
 }

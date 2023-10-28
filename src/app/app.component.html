@@ -12,12 +12,20 @@
 
             <div style="border: 0.2mm solid rgb(53, 53, 53);"></div>
 
+
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+              <!-- Aquí condiciona la visualización de la opción de "Control" -->
+              <ng-container *ngIf="!showJoystick && p.url === '/joystick'">
+                <!-- No mostrar la opción de "Control" -->
+              </ng-container>
+              <ng-container *ngIf="showJoystick || p.url !== '/joystick'">
+                <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
                   <ion-label>{{ p.title }}</ion-label>
-              </ion-item>
+                </ion-item>
+              </ng-container>
             </ion-menu-toggle>
+
           </ion-list>
 
           <!-- <ion-list id="labels-list">

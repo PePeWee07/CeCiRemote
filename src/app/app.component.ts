@@ -1,3 +1,4 @@
+import { CeciTalkService } from './service/ceci-talk.service';
 import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
@@ -9,12 +10,15 @@ export class AppComponent {
     { title: 'Inicio', url: '/folder/inbox', icon: 'home' },
     { title: 'Control', url: '/joystick', icon: 'paper-plane' },
     { title: 'Preguntas', url: '/preguntas', icon: 'heart' },
-    // { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    // { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    // { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    // { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    // { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
   // public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  
+  public showJoystick = false;
+
+  //recibir notificaciones de cambios en el estado
+  constructor(private ceciTalkService: CeciTalkService) {
+    this.ceciTalkService.showJoystick$.subscribe((value) => {
+      this.showJoystick = value;
+    });
+  }
 }

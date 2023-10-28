@@ -11,12 +11,15 @@
 <ion-content [fullscreen]="false">
 
   <div class="container">
+
      <!-- btn settings -->
-     <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
-      <ion-fab-button size="small"  [color]="viewSettings ? 'warning' : 'medium'">
-        <ion-icon name="cog" style="font-size: 22px"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+     <div *ngIf="showSecretButton">
+       <ion-fab class="ion-fab-settings" slot="fixed" vertical="top" horizontal="start"  (click)="viewSettings = !viewSettings">
+        <ion-fab-button size="small"  [color]="viewSettings ? 'warning' : 'medium'">
+          <ion-icon name="cog" style="font-size: 22px"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+     </div>
 
     <ion-grid *ngIf="viewSettings">
       <ion-row class="ion-justify-content-end">
@@ -30,6 +33,9 @@
           <ion-item>
             <ion-input label="Puerto"[(ngModel)]="port" type="number" labelPlacement="stacked"></ion-input>
           </ion-item>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <ion-button size="small" color="success" (click)="toggleActions()"> Ocultar</ion-button>
+          </div>
         </div>
       </ion-row>
     </ion-grid>
@@ -67,7 +73,7 @@
     </div>
     <div class="img-robot">
       <div class="img-robot-center">
-        <ion-img style="height: 250px; width: 250px;"
+        <ion-img style="height: 250px; width: 250px;" (click)="handleEasterEggClick()"
         src="../../assets/img/ceci.png"
         alt="Ceci robot"
         ></ion-img>

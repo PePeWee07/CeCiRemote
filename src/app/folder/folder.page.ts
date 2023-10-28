@@ -1,7 +1,7 @@
+import { CeciTalkService } from './../service/ceci-talk.service';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-folder',
@@ -11,28 +11,54 @@ import { environment } from 'src/environments/environment';
 export class FolderPage implements OnInit {
   public folder!: string;
   private activatedRoute = inject(ActivatedRoute);
-  constructor() {}
+  constructor(private ceciTalkService: CeciTalkService, private router: Router) {}
 
  async ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;
     const { value } = await Preferences.get({ key: 'ipDefault' });
       console.log('ipDefault: ', value);
+
+      //Capturamos el valor del estado de showJoystick
+      const currentShowJoystick = this.ceciTalkService.getShowJoystick(); // Obtener el estado actual
+      console.log(this.ceciTalkService.getShowJoystick());
+      // Actualizar el texto en el badge
+      this.estadoControl = currentShowJoystick ? 'Activado' : 'Desactivado';
   }
 
-  easterEggClickCount = 0;
+
+
+  estadoControl: any = false;
+// Cambiar el estado de showJoystick
+toggleJoystick() {
+  const currentShowJoystick = this.ceciTalkService.getShowJoystick(); // Obtener el estado actual
+  this.ceciTalkService.setShowJoystick(!currentShowJoystick); // Cambiar el estado
+  console.log(this.ceciTalkService.getShowJoystick());
+
+  // Actualizar el texto en el badge
+  this.estadoControl = currentShowJoystick ? 'Desactivado' : 'Activado';
+}
+
+
+easterEggClickCount = 0;
+
+//Muestra el modo desarrollador despues de 5 toques a CeCi
+handleEasterEggClick() {
+  this.easterEggClickCount++;
+
+  if (this.easterEggClickCount === 5) {
+    this.showSecretButton = true;
+    this.easterEggClickCount = 0;
+  }
+}
+showSecretButton = false;
 
 //Ayuda a resetear las ip para tomar las de por defecto
-  handleEasterEggClick() {
-    this.easterEggClickCount++;
-
-    if (this.easterEggClickCount === 5) {
-      this.showSecretButton = true;
-      this.easterEggClickCount = 0;
-    }
-  }
-  showSecretButton = false;
-
   async deleteStorage(){
     await Preferences.remove({ key: "ipDefault" });
+    console.log("Se eliminaron las ip guardadas");
+  }
+
+  irAPreguntas() {
+    this.router.navigate(['/preguntas']);
   }
 }
