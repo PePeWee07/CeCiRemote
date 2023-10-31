@@ -148,8 +148,7 @@
 
               <div class="joystick-btns-content" >
 
-
-                  <ion-row class="ion-justify-content-center">
+                  <ion-row>
                     <ion-col size="12" class="ion-text-center">
                       <ion-button (click)="goForward()" [disabled]="!connected" size="small" color="medium">
                         <ion-icon name="arrow-up"></ion-icon>
@@ -158,31 +157,34 @@
                   </ion-row>
 
                   <ion-row class="ion-justify-content-center">
-                    <ion-col size="3" class="ion-text-center" >
+                    <ion-col size="4" class="ion-text-center">
                       <ion-button (click)="goLeft()" [disabled]="!connected" size="small"  color="medium">
                         <ion-icon name="arrow-back"></ion-icon>
                       </ion-button>
                     </ion-col>
 
-                    <ion-col size="6" class="ion-text-center ion-justify-content-center" >
-                      <ion-button (click)="goStop()" style="margin-left: 15%;" [disabled]="!connected" size="small"  color="danger">Stop</ion-button>
+                    <ion-col size="4" class="ion-text-center">
+                      <ion-button (click)="goStop()" [disabled]="!connected" size="small"  color="danger">
+                        <ion-icon name="hand-left-outline"></ion-icon>
+                      </ion-button>
                     </ion-col>
 
-                    <ion-col size="3" class="ion-text-center" >
+                    <ion-col size="4" class="ion-text-center">
                       <ion-button (click)="goRight()" [disabled]="!connected" size="small"  color="medium">
                         <ion-icon name="arrow-forward"></ion-icon>
                       </ion-button>
                     </ion-col>
                   </ion-row>
 
-                  <ion-row class="ion-justify-content-center">
+                  <ion-row>
                     <ion-col size="12" class="ion-text-center">
                       <ion-button (click)="goBack()" [disabled]="!connected" size="small"  color="medium">
                         <ion-icon name="arrow-down"></ion-icon>
                       </ion-button>
                     </ion-col>
                   </ion-row>
-                </div>
+
+              </div>
 
 
             </ion-row>
