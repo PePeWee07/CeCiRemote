@@ -42,7 +42,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   angularSpeed: number = 0.0;
   managerJoystick: any;
   maxLinear: number = 0.08;
-  maxAngular: number = 0.3;
+  maxAngular: number = 0.5;
   optionsJoystick: nipplejs.JoystickManagerOptions = {};
   isJoystickFollow: boolean = false;
 
