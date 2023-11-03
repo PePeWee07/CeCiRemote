@@ -38,8 +38,8 @@ export class JoystickPage implements AfterViewInit, OnInit {
   message: ROSLIB.Message | null = null;
 
   //variables para el joystick
-  linearSpeed: number = 0.0;
-  angularSpeed: number = 0.0;
+  linearSpeed: number = 0.0; // velocidad lineal ya calculada
+  angularSpeed: number = 0.0; // velocidad angular ya calculada
   managerJoystick: any;
   maxLinear: number = 0.08;
   maxAngular: number = 0.5;
@@ -49,6 +49,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   constructor(private alertController: AlertController) {}
 
  async ngOnInit() {
+  // Cargar ip por defecto o la ultima ip usada
     const { value } = await Preferences.get({ key: 'ipDefault' });
       console.log('ipDefault: ', value);
       if (value) {
@@ -57,6 +58,15 @@ export class JoystickPage implements AfterViewInit, OnInit {
       } else {
         this.ipRobot = environment.defaultIP;
       }
+  // cargar las velocidades por defecto o las ultimas velocidades usadas
+  const { value:maxLinearStorage } = await Preferences.get({ key: 'maxLinear' })
+  const { value:maxAngularStorage } = await Preferences.get({ key: 'maxAngular' })
+    console.log('moves: ', maxLinearStorage);
+    console.log('moves: ', maxAngularStorage);
+    if (maxLinearStorage !== null && maxAngularStorage !== null) {
+      this.maxLinear = parseFloat(maxLinearStorage!);
+      this.maxAngular = parseFloat(maxAngularStorage!);
+    }
   }
 
   // Metodo para renderizar el joystick
@@ -77,17 +87,39 @@ export class JoystickPage implements AfterViewInit, OnInit {
     this.managerJoystick = nipplejs.create(this.optionsJoystick);
 
     // Manejador para el evento 'move' del joystick
-    this.managerJoystick.on('move', (_event: any, nipple: any) => {
+    this.managerJoystick.on('move', async (_event: any, nipple: any) => {
+
       // Calcular velocidades en función de la posición del joystick
-      this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
-      this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
 
-      console.log(
-        `linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed},
-        maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`
-      );
+      Preferences.set({ key: 'maxLinear', value: this.maxLinear.toString() });
+      Preferences.set({ key: 'maxAngular', value: this.maxAngular.toString() });
 
+      const { value:maxLinearStorage } = await Preferences.get({ key: 'maxLinear' })
+      const { value:maxAngularStorage } = await Preferences.get({ key: 'maxAngular' })
+
+      // Si hay datos guardados en localstroge, los carga
+      if (maxLinearStorage !== null && maxAngularStorage !== null) {
+        console.log('moves: ', maxLinearStorage);
+        console.log('moves: ', maxAngularStorage);
+        this.managerJoystick.on('move', (_event: any, nipple: any) => {
+          this.linearSpeed = Math.sin(nipple.angle.radian) * parseFloat(maxLinearStorage!);
+          this.angularSpeed = -Math.cos(nipple.angle.radian) * parseFloat(maxAngularStorage!);
+
+          this.moveRobot(this.linearSpeed, this.angularSpeed);
+        });
+
+        // si no hay datos guardados en localstroge, carga los datos por defecto
+      } else {
+        this.managerJoystick.on('move', (_event: any, nipple: any) => {
+          this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
+          this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+
+          this.moveRobot(this.linearSpeed, this.angularSpeed);
+        });
+      }
+      // manda cordenadas velocidades calculadas al topic
       this.moveRobot(this.linearSpeed, this.angularSpeed);
+      this.configJoystick();
     });
 
     // Manejador para el evento 'end' del joystick velocidades en cero cuando
@@ -129,22 +161,34 @@ export class JoystickPage implements AfterViewInit, OnInit {
       this.managerJoystick = nipplejs.create(this.optionsJoystick);
       this.setOpenUpdateJoystick(true);
 
-      // Manejador para el evento 'move' del joystick
-      this.managerJoystick.on('move', (_event: any, nipple: any) => {
-        // Calcular velocidades en función de la posición del joystick
-        this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
-        this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+      Preferences.set({ key: 'maxLinear', value: this.maxLinear.toString() });
+      Preferences.set({ key: 'maxAngular', value: this.maxAngular.toString() });
 
-        console.log(
-          `linearSpeed: ${this.linearSpeed}, angularSpeed: ${this.angularSpeed},
-        maxLinear: ${this.maxLinear}, maxAngular: ${this.maxAngular}`
-        );
+      const { value:maxLinearStorage } = await Preferences.get({ key: 'maxLinear' })
+      const { value:maxAngularStorage } = await Preferences.get({ key: 'maxAngular' })
 
-        this.moveRobot(this.linearSpeed, this.angularSpeed);
-      });
+      // Si hay datos guardados en localstroge, los carga
+      if (maxLinearStorage !== null && maxAngularStorage !== null) {
+        console.log('moves: ', maxLinearStorage);
+        console.log('moves: ', maxAngularStorage);
+        this.managerJoystick.on('move', (_event: any, nipple: any) => {
+          this.linearSpeed = Math.sin(nipple.angle.radian) * parseFloat(maxLinearStorage!);
+          this.angularSpeed = -Math.cos(nipple.angle.radian) * parseFloat(maxAngularStorage!);
 
-      // Manejador para el evento 'end' del joystick velocidades en cero cuando se
-      // suelta el joystick
+          this.moveRobot(this.linearSpeed, this.angularSpeed);
+        });
+
+        // si no hay datos guardados en localstroge, carga los datos por defecto
+      } else {
+        this.managerJoystick.on('move', (_event: any, nipple: any) => {
+          this.linearSpeed = Math.sin(nipple.angle.radian) * this.maxLinear;
+          this.angularSpeed = -Math.cos(nipple.angle.radian) * this.maxAngular;
+
+          this.moveRobot(this.linearSpeed, this.angularSpeed);
+        });
+      }
+
+      // Manejador para el evento 'end' del joystick velocidades en cero cuando se suelta el joystick
       this.managerJoystick.on('end', () => {
         this.linearSpeed = 0.0;
         this.angularSpeed = 0.0;

@@ -55,6 +55,8 @@ showSecretButton = false;
 //Ayuda a resetear las ip para tomar las de por defecto
   async deleteStorage(){
     await Preferences.remove({ key: "ipDefault" });
+    await Preferences.remove({ key: "maxLinear" });
+    await Preferences.remove({ key: "maxAngular" });
     console.log("Se eliminaron las ip guardadas");
   }
 

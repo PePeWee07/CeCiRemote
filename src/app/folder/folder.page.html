@@ -13,15 +13,26 @@
     <div style="display: flex; justify-content: center; align-items: center;" class="welcome-content">
       <div style="margin-top: 10%;">
 
-        <div *ngIf="showSecretButton" class="app-description ion-margin-bottom" >
-          <h2>Modo Operador 🎮</h2>
+        <ion-card *ngIf="showSecretButton" class=" ion-margin-bottom">
+          <ion-card-header>
+            <ion-card-title>Modo Operador 🎮</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
             <ion-button size="small" color="danger" (click)="deleteStorage()"> Restablecer IP</ion-button> <br>
             <ion-button size="small" color="dark" (click)="toggleJoystick()">
               <ion-badge class="ion-margin-start" slot="end" color="warning">{{estadoControl}}</ion-badge>
               Control
             </ion-button> <br>
             <ion-button size="small" color="success" (click)="showSecretButton = !showSecretButton"> Cerrar</ion-button>
+          </ion-card-content>
+        </ion-card>
+
+        <div class="lines">
+          <div class="line one"></div>
+          <div class="line two"></div>
         </div>
+        <div class="overlay"></div>
 
         <div class="app-description" *ngIf="!showSecretButton">
           <h2 style="margin: 0"><b>Bienvenido</b></h2>
