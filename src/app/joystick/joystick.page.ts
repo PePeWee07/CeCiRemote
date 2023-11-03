@@ -88,6 +88,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       );
 
       this.moveRobot(this.linearSpeed, this.angularSpeed);
+      this.configJoystick();
     });
 
     // Manejador para el evento 'end' del joystick velocidades en cero cuando
