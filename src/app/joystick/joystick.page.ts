@@ -25,7 +25,6 @@ export class JoystickPage implements AfterViewInit, OnInit {
     this.modal.dismiss('confirm');
   }
 
-
   viewSettings: boolean = false;
 
   //botones de informacion de velocidad lineal y angular
