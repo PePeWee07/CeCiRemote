@@ -1,9 +1,9 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild  } from '@angular/core';
 
 import * as ROSLIB from 'roslib';
 import * as nipplejs from 'nipplejs';
 
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonModal  } from '@ionic/angular';
 
 import { Clipboard } from '@capacitor/clipboard';
 import { Preferences } from '@capacitor/preferences';
@@ -15,6 +15,17 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./joystick.page.scss'],
 })
 export class JoystickPage implements AfterViewInit, OnInit {
+  @ViewChild(IonModal) modal: IonModal;
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss('confirm');
+  }
+
+
   viewSettings: boolean = false;
 
   //botones de informacion de velocidad lineal y angular
@@ -67,6 +78,8 @@ export class JoystickPage implements AfterViewInit, OnInit {
       this.maxLinear = parseFloat(maxLinearStorage!);
       this.maxAngular = parseFloat(maxAngularStorage!);
     }
+
+
   }
 
   // Metodo para renderizar el joystick
@@ -219,6 +232,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
   }
 
   msj: any;
+  showModalError: boolean = false;
   //conectar a ROSBridge
   async connect() {
     this.msj = null;
@@ -267,15 +281,15 @@ export class JoystickPage implements AfterViewInit, OnInit {
         this.ros.on('error', async (error) => {
           console.log('Error connecting to websocket server: ', error);
           this.msj = error;
+          this.showModalError = true;
 
-          const alert = await this.alertController.create({
-            header: 'Error',
-            subHeader: 'Error al conectar',
-            message: 'Compruebe si la IP y Puerto son correctos.',
-            buttons: ['OK'],
-          });
-
-          await alert.present();
+          // const alert = await this.alertController.create({
+          //   header: 'Error',
+          //   subHeader: 'Error al conectar',
+          //   message: 'Compruebe si la IP y Puerto son correctos.',
+          //   buttons: ['OK'],
+          // });
+          // await alert.present();
 
           this.connected = false;
           this.connecting = false;
@@ -289,6 +303,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
       } catch (error: any) {
         console.log('Error al conectar: ', error);
         this.msj = error;
+        this.showModalError = true;
         this.connecting = false;
       }
     }
@@ -473,6 +488,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
         //Para cerrar el mensaje
         setTimeout(() => {
           this.msj = null;
+          this.cancel();
         }, 1000);
         this.isToastOpenClipBoard = true;
       } catch (error) {
@@ -486,6 +502,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
         //Para cerrar el mensaje
         setTimeout(() => {
           this.msj = null;
+          this.cancel();
         }, 1000);
         this.isToastOpenClipBoard = true;
       } catch (error) {

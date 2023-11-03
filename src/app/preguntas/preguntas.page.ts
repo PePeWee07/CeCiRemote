@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CeciTalkService } from '../service/ceci-talk.service';
 import { Howl } from 'howler';
 import { Preferences } from '@capacitor/preferences';
 import { Clipboard } from '@capacitor/clipboard';
 import { environment } from 'src/environments/environment.prod';
+import { IonModal  } from '@ionic/angular';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./preguntas.page.scss'],
 })
 export class PreguntasPage implements OnInit {
+  @ViewChild(IonModal) modal: IonModal;
+
   private sounds: { [key: string]: Howl } = {};
   isPlaying = false;
   selectedButton: string | null = null;
@@ -96,6 +99,7 @@ export class PreguntasPage implements OnInit {
         (error) =>{
            console.error('Alerta: ', error)
           this.msj = error;
+          this.showModalError = true;
      }
       );
   }
@@ -112,6 +116,7 @@ export class PreguntasPage implements OnInit {
   }
 
   msj: any;
+  showModalError: boolean = false;
   isToastOpen = false;
    //tostada de copiado al portapapeles
    isToastOpenClipBoard = false;
@@ -136,6 +141,7 @@ export class PreguntasPage implements OnInit {
          //Para cerrar el mensaje
          setTimeout(() => {
            this.msj = null;
+           this.cancel();
          }, 1000);
          this.isToastOpenClipBoard = true;
        } catch (error) {
@@ -149,6 +155,7 @@ export class PreguntasPage implements OnInit {
          //Para cerrar el mensaje
          setTimeout(() => {
            this.msj = null;
+           this.cancel();
          }, 1000);
          this.isToastOpenClipBoard = true;
        } catch (error) {
@@ -175,4 +182,7 @@ toggleActions() {
   this.viewSettings = !this.viewSettings;
 }
 
+cancel() {
+  this.modal.dismiss(null, 'cancel');
+}
 }

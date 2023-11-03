@@ -110,19 +110,32 @@
 
       <ion-grid>
 
+
         <!-- Mensjae de error -->
-        <div *ngIf="msj">
-          <ion-card color="dark">
-            <ion-card-header>
-              <ion-button size="small" color="warning" (click)="copiarAlPortapapeles()">Copiar y cerrar</ion-button>
-              <pre class="ion-text-center">"Copie el error y repórtelo"</pre>
-              <ion-card-title>Ocurrió un error inesperado: </ion-card-title>
-              <ion-card-subtitle>Error</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content> {{msj | json}}
-            </ion-card-content>
-          </ion-card>
-        </div>
+        <ion-modal [isOpen]="showModalError" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-buttons slot="start">
+                  <ion-button (click)="cancel()">Cerrar</ion-button>
+                </ion-buttons>
+                <ion-title>ERROR</ion-title>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+              <ion-card color="dark">
+                <ion-card-header>
+                  <ion-button size="small" color="warning" (click)="copiarAlPortapapeles()">Copiar y cerrar</ion-button>
+                  <pre class="ion-text-center">"Copie el error y repórtelo"</pre>
+                  <ion-card-title>Ocurrió un error: </ion-card-title>
+                  <ion-card-subtitle>Error</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content> {{msj | json}}
+                </ion-card-content>
+              </ion-card>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
         <ion-toast
           [isOpen]="isToastOpenClipBoard"
           message="Contenido copiado al portapapeles"

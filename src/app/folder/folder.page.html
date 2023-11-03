@@ -13,13 +13,14 @@
     <div style="display: flex; justify-content: center; align-items: center;" class="welcome-content">
       <div style="margin-top: 10%;">
 
-        <ion-card *ngIf="showSecretButton" class=" ion-margin-bottom">
+        <ion-card *ngIf="showSecretButton" class=" ion-margin-bottom" color="dark">
           <ion-card-header>
             <ion-card-title>Modo Operador 🎮</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
-            <ion-button size="small" color="danger" (click)="deleteStorage()"> Restablecer IP</ion-button> <br>
+            <ion-button size="small" color="danger" (click)="deleteStorageIp()"> Restablecer IP</ion-button>
+            <ion-button size="small" color="danger" (click)="deleteStorageVelocity()"> Restablecer Velocidades</ion-button> <br>
             <ion-button size="small" color="dark" (click)="toggleJoystick()">
               <ion-badge class="ion-margin-start" slot="end" color="warning">{{estadoControl}}</ion-badge>
               Control
@@ -27,6 +28,18 @@
             <ion-button size="small" color="success" (click)="showSecretButton = !showSecretButton"> Cerrar</ion-button>
           </ion-card-content>
         </ion-card>
+        <ion-toast
+          [isOpen]="isToastOpenIp"
+          message="Se eliminaron las ip guardadas"
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+        <ion-toast
+          [isOpen]="isToastOpenVelocity"
+          message="Se eliminaron las velocidades guardadas"
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
 
         <div class="lines">
           <div class="line one"></div>
