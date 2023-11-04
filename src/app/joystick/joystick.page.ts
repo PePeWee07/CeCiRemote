@@ -19,10 +19,7 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    this.modal.dismiss('confirm');
+    this.showModalError = false;
   }
 
   viewSettings: boolean = false;

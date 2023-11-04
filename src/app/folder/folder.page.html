@@ -7,79 +7,50 @@
   </ion-toolbar>
 </div>
 
+<ion-content [fullscreen]="true" class="ion-text-center center-content welcome">
 
-<ion-content [fullscreen]="true" class="ion-text-center center-content">
-
-  <!-- <div class="stars">
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-  <div class="star"></div>
-</div> -->
 
   <div>
-    <div style="display: flex; justify-content: center; align-items: center;" class="welcome-content">
-      <div style="margin-top: 10%;">
-
-        <ion-card *ngIf="showSecretButton" class=" ion-margin-bottom" color="dark">
+    <div
+      style="display: flex; justify-content: center; align-items: center"
+      class="welcome-content"
+    >
+      <div style="margin-top: 10%">
+        <ion-card
+          *ngIf="showSecretButton"
+          class="ion-margin-bottom"
+          color="dark"
+        >
           <ion-card-header>
             <ion-card-title>Modo Operador 🎮</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
-            <ion-button size="small" color="danger" (click)="deleteStorageIp()"> Restablecer IP</ion-button>
-            <ion-button size="small" color="danger" (click)="deleteStorageVelocity()"> Restablecer Velocidades</ion-button> <br>
+            <ion-button size="small" color="danger" (click)="deleteStorageIp()">
+              Restablecer IP</ion-button
+            >
+            <ion-button
+              size="small"
+              color="danger"
+              (click)="deleteStorageVelocity()"
+            >
+              Restablecer Velocidades</ion-button
+            >
+            <br />
             <ion-button size="small" color="dark" (click)="toggleJoystick()">
-              <ion-badge class="ion-margin-start" slot="end" color="warning">{{estadoControl}}</ion-badge>
+              <ion-badge class="ion-margin-start" slot="end" color="warning"
+                >{{estadoControl}}</ion-badge
+              >
               Control
-            </ion-button> <br>
-            <ion-button size="small" color="success" (click)="showSecretButton = !showSecretButton"> Cerrar</ion-button>
+            </ion-button>
+            <br />
+            <ion-button
+              size="small"
+              color="success"
+              (click)="showSecretButton = !showSecretButton"
+            >
+              Cerrar</ion-button
+            >
           </ion-card-content>
         </ion-card>
         <ion-toast
@@ -102,36 +73,45 @@
         <div class="overlay"></div>
 
         <div class="app-description" *ngIf="!showSecretButton">
-          <h2 style="margin: 0"><b>Bienvenido</b></h2>
-          <b>
-            <p class="ion-padding">Controla a CeCi y embárcate en aventuras robóticas emocionantes con nuestro joystick personalizado.</p>
-          </b>
+          <h1 class="title-welcome">Bienvenido</h1>
+            <p class="ion-padding">
+              Controla a CeCi y embárcate en aventuras robóticas emocionantes
+              con nuestro joystick personalizado.
+            </p>
         </div>
-        <img src="../../assets/img/ceci.png" (click)="handleEasterEggClick()" width="225px" height="350px" alt="ceci robot"/>
-        <br/>
-         <ion-button color="warning" class="ion-margin-vertical" (click)="irAPreguntas()">
+        <img
+          src="../../assets/img/ceci.png"
+          (click)="handleEasterEggClick()"
+          width="225px"
+          height="350px"
+          alt="ceci robot"
+        />
+        <br />
+        <ion-button
+          color="warning"
+          class="ion-margin-vertical"
+          (click)="irAPreguntas()"
+        >
           Ir a Preguntas
-         </ion-button>
+        </ion-button>
       </div>
     </div>
   </div>
 </ion-content>
 
 <ion-footer collapse="fade" class="ion-no-border">
-  <ion-toolbar class="ion-text-center" style="background: #ffda56c2;">
+  <ion-toolbar class="ion-text-center" style="background: #ffda56c2">
     <h6 class="capitalize" style="display: inline; color: rgb(0, 0, 0)">
-      <b style="margin-right: 5px;">Creador por:</b>
+      <b style="margin-right: 5px">Creador por:</b>
     </h6>
     <p style="display: inline">
       <a
-      target="_blank"
-      rel="noopener noreferrer"
-      href="https://www.instagram.com/pepe._.roman/"
-      >José Román
-      <ion-icon name="logo-instagram"></ion-icon>
-      </a
-      >
-
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.instagram.com/pepe._.roman/"
+        >José Román
+        <ion-icon name="logo-instagram"></ion-icon>
+      </a>
     </p>
   </ion-toolbar>
 </ion-footer>

@@ -184,5 +184,6 @@ toggleActions() {
 
 cancel() {
   this.modal.dismiss(null, 'cancel');
+  this.showModalError = false;
 }
 }
