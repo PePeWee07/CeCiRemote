@@ -17,9 +17,9 @@
     >
       <div style="margin-top: 10%">
         <ion-card
-          *ngIf="showSecretButton"
-          class="ion-margin-bottom"
-          color="dark"
+          *ngIf="!showSecretButton"
+          class="ion-margin-bottom operador-card"
+
         >
           <ion-card-header>
             <ion-card-title>Modo Operador 🎮</ion-card-title>
@@ -37,7 +37,7 @@
               Restablecer Velocidades</ion-button
             >
             <br />
-            <ion-button size="small" color="dark" (click)="toggleJoystick()">
+            <ion-button size="small" color="light" (click)="toggleJoystick()">
               <ion-badge class="ion-margin-start" slot="end" color="warning"
                 >{{estadoControl}}</ion-badge
               >
@@ -46,7 +46,7 @@
             <br />
             <ion-button
               size="small"
-              color="success"
+              color="tertiary"
               (click)="showSecretButton = !showSecretButton"
             >
               Cerrar</ion-button
