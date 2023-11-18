@@ -153,11 +153,28 @@
         <ion-row>
           <ion-grid style="margin-top: 20%;">
 
-            <ion-row class="ion-justify-content-center joystick-btns">
+            <ion-toolbar style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
+              <ion-title class="joystick-btns-header-menu">Botones</ion-title>
+            </ion-toolbar>
 
-              <ion-toolbar style="border-top-right-radius: 10px; border-top-left-radius: 10px;">
-                <ion-title class="joystick-btns-header-menu">Botones</ion-title>
-              </ion-toolbar>
+            <ion-row class="ion-justify-content-between joystick-btns-top">
+
+              <ion-col size="3" style="display: inline-flex; justify-content: center;">
+                <div *ngIf="currentSpeed !== 0" style="display: inline-flex; justify-content: start;">
+                  <ion-icon [name]="currentSpeed > 0 ? 'arrow-up' : 'arrow-down'"></ion-icon>
+                  <pre>{{currentSpeed}} m/s</pre>
+                </div>
+              </ion-col>
+              <ion-col size="3" style="display: inline-flex; justify-content: center;">
+                <div *ngIf="currentAngularSpeed !== 0" style="display: inline-flex; justify-content: end;">
+                  <pre>{{currentAngularSpeed}} m/s</pre>
+                  <ion-icon [name]="currentAngularSpeed > 0 ? 'arrow-back' : 'arrow-forward'"></ion-icon>
+                </div>
+              </ion-col>
+
+            </ion-row>
+
+            <ion-row class="ion-justify-content-center joystick-btns-bottom">
 
               <div class="joystick-btns-content" >
 
@@ -198,7 +215,6 @@
                   </ion-row>
 
               </div>
-
 
             </ion-row>
 
@@ -268,3 +284,4 @@
     </ion-grid>
   </ion-toolbar>
 </ion-footer>
+

@@ -114,6 +114,15 @@ ion-menu-button {
   background: $color-secondary;
   border-radius: 10px;
 }
+.joystick-btns-bottom{
+  background: $color-secondary;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.joystick-btns-top{
+  background: $color-secondary;
+  height: 20px;
+}
 
 .joystick-btns-header-menu{
   border-top-right-radius: 10px;
@@ -136,3 +145,25 @@ ion-menu-button {
   animation-duration: 1.5s;
 }
 
+
+/* app.component.scss */
+.speed-indicator {
+  display: inline-flex;
+  border: 1px solid black;
+}
+
+.circle-speed {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 4px;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}

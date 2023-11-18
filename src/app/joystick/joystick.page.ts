@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, ViewChild  } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 
 import * as ROSLIB from 'roslib';
 import * as nipplejs from 'nipplejs';
@@ -318,9 +318,15 @@ export class JoystickPage implements AfterViewInit, OnInit {
   setTopic(): void {
     if (this.ros) {
       //Suscribirse al topic de velocidad
+      // this.topic = new ROSLIB.Topic({
+      //   ros: this.ros,
+      //   name: '/mobile_base/commands/velocity',
+      //   messageType: 'geometry_msgs/Twist',
+      // });
+
       this.topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: '/mobile_base/commands/velocity',
+        name: '/turtle1/cmd_vel',
         messageType: 'geometry_msgs/Twist',
       });
 
@@ -351,115 +357,154 @@ export class JoystickPage implements AfterViewInit, OnInit {
     }
   }
 
-  // Método para avanzar
-  goForward(): void {
-    if (this.topic) {
-      this.message = new ROSLIB.Message({
-        linear: {
-          x: this.maxLinear,
-          y: 0,
-          z: 0,
-        },
-        angular: {
-          x: 0,
-          y: 0,
-          z: 0,
-        },
-      });
-      this.topic.publish(this.message);
-      console.log('Sent Forward command.');
-    } else {
-      console.log('Topic move no set');
-    }
-  }
 
-  // Método para girar a la izquierda
-  goLeft(): void {
-    if (this.topic) {
-      this.message = new ROSLIB.Message({
-        linear: {
-          x: this.maxLinear,
-          y: 0,
-          z: 0,
-        },
-        angular: {
-          x: 0,
-          y: 0,
-          z: this.maxAngular,
-        },
-      });
-      this.topic!.publish(this.message);
-      console.log('Sent Left command.');
-    } else {
-      console.log('Topic move no set');
-    }
-  }
+  // Variables de estado
+currentSpeed = 0;  // Velocidad actual
+maxPositiveSpeed = 5; // Límite máximo de velocidad positiva
+maxNegativeSpeed = -5; // Límite máximo de velocidad negativa
+movementTimer: any; // Variable para almacenar el temporizador
 
-  // Método para girar a la derecha
-  goRight(): void {
-    if (this.topic) {
-      this.message = new ROSLIB.Message({
-        linear: {
-          x: this.maxLinear,
-          y: 0,
-          z: 0,
-        },
-        angular: {
-          x: 0,
-          y: 0,
-          z: -this.maxAngular,
-        },
-      });
-      this.topic!.publish(this.message);
-      console.log('Sent Right command.');
-    } else {
-      console.log('Topic move no set');
-    }
-  }
+// Método para avanzar
+goForward(): void {
+  if (this.topic) {
+    // Incrementa la velocidad al avanzar
+    this.currentSpeed += 1;
 
-  // Método para retroceder
-  goBack(): void {
-    if (this.topic) {
-      this.message = new ROSLIB.Message({
-        linear: {
-          x: -this.maxLinear,
-          y: 0,
-          z: 0,
-        },
-        angular: {
-          x: 0,
-          y: 0,
-          z: 0,
-        },
-      });
-      this.topic!.publish(this.message);
-      console.log('Sent Back command.');
-    } else {
-      console.log('Topic move no set');
+    // Verifica el límite máximo de velocidad positiva
+    if (this.currentSpeed > this.maxPositiveSpeed) {
+      this.currentSpeed = this.maxPositiveSpeed;
     }
-  }
 
-  // Método para detener el movimiento
-  goStop(): void {
-    if (this.topic) {
-      this.message = new ROSLIB.Message({
-        linear: {
-          x: 0,
-          y: 0,
-          z: 0,
-        },
-        angular: {
-          x: 0,
-          y: 0,
-          z: 0,
-        },
-      });
-      this.topic.publish(this.message);
-      console.log('Sent Stop command.');
-    } else {
-      console.log('Topic move no set');
-    }
+    this.startMovementTimer();
+  } else {
+    console.log('Topic move not set');
   }
+}
+
+// Método para retroceder
+goBack(): void {
+  if (this.topic) {
+    // Reduzca la velocidad al retroceder
+    this.currentSpeed -= 1;
+
+    // Verifica el límite máximo de velocidad negativa
+    if (this.currentSpeed < this.maxNegativeSpeed) {
+      this.currentSpeed = this.maxNegativeSpeed;
+    }
+
+    this.startMovementTimer();
+  } else {
+    console.log('Topic move not set');
+  }
+}
+
+// Método para iniciar el temporizador de movimiento
+startMovementTimer(): void {
+  this.movementTimer = setInterval(() => {
+    this.message = new ROSLIB.Message({
+      linear: {
+        x: this.currentSpeed,
+        y: 0,
+        z: 0,
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+    });
+    this.topic!.publish(this.message);
+    console.log(`Sent Move command with speed: ${this.currentSpeed} m/s`);
+  }, 100); // Ajusta el intervalo según tus necesidades
+}
+
+ // Variables de estado para el movimiento angular
+currentAngularSpeed = 0;  // Velocidad angular actual
+maxLeftSpeed = 3; // Límite máximo de velocidad angular en sentido horario
+maxRightSpeed = -3; // Límite máximo de velocidad angular en sentido antihorario
+angularMovementTimer: any; // Temporizador para el movimiento angular
+
+// Método para girar a la izquierda
+goLeft(): void {
+  if (this.topic) {
+    // Incrementa la velocidad angular en sentido horario
+    this.currentAngularSpeed += 1;
+
+    // Verifica el límite máximo de velocidad angular en sentido horario
+    if (this.currentAngularSpeed > this.maxLeftSpeed) {
+      this.currentAngularSpeed = this.maxLeftSpeed;
+    }
+
+    this.startAngularMovementTimer();
+  } else {
+    console.log('Topic move not set');
+  }
+}
+
+// Método para girar a la derecha
+goRight(): void {
+  if (this.topic) {
+    // Incrementa la velocidad angular en sentido antihorario
+    this.currentAngularSpeed -= 1;
+
+    // Verifica el límite máximo de velocidad angular en sentido antihorario
+    if (this.currentAngularSpeed < this.maxRightSpeed) {
+      this.currentAngularSpeed = this.maxRightSpeed;
+    }
+
+    this.startAngularMovementTimer();
+  } else {
+    console.log('Topic move not set');
+  }
+}
+
+// Método para iniciar el temporizador de movimiento angular
+startAngularMovementTimer(): void {
+  this.angularMovementTimer = setInterval(() => {
+    this.message = new ROSLIB.Message({
+      linear: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: this.currentAngularSpeed,
+      },
+    });
+    this.topic!.publish(this.message);
+    console.log(`Sent Angular Movement command with speed: ${this.currentAngularSpeed} rad/s`);
+  }, 100); // Ajusta el intervalo según tus necesidades
+}
+
+// Método para detener el movimiento angular y lineal
+goStop(): void {
+  clearInterval(this.angularMovementTimer); // Detén el temporizador angular
+  clearInterval(this.movementTimer); // Detén el temporizador lineal
+
+  this.currentAngularSpeed = 0; // Establece la velocidad angular a cero
+  this.currentSpeed = 0; // Establece la velocidad lineal a cero
+
+  if (this.topic) {
+    this.message = new ROSLIB.Message({
+      linear: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+    });
+    this.topic.publish(this.message);
+    console.log('Sent Stop Movement command.');
+  } else {
+    console.log('Topic move not set');
+  }
+}
 
   //tostada de copiado al portapapeles
   isToastOpenClipBoard = false;
