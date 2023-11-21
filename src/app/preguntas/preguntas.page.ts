@@ -50,9 +50,11 @@ export class PreguntasPage implements OnInit {
     this.sounds['8'] = new Howl({
       src: ['../../assets/audios/8iniciativa_PG.mp3'],
     });
+
     this.sounds['9'] = new Howl({
       src: ['../../assets/audios/10volveraVer_PG.mp3'],
     });
+
 
     // Configura eventos 'end' para cada instancia de Howl
     for (const key in this.sounds) {

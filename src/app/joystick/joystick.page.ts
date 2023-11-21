@@ -368,7 +368,7 @@ movementTimer: any; // Variable para almacenar el temporizador
 goForward(): void {
   if (this.topic) {
     // Incrementa la velocidad al avanzar
-    this.currentSpeed += 0.2;
+    this.currentSpeed += 0.05;
 
     // Verifica el límite máximo de velocidad positiva
     if (this.currentSpeed > this.maxPositiveSpeed) {
@@ -385,7 +385,7 @@ goForward(): void {
 goBack(): void {
   if (this.topic) {
     // Reduzca la velocidad al retroceder
-    this.currentSpeed -= 0.2;
+    this.currentSpeed -= 0.05;
 
     // Verifica el límite máximo de velocidad negativa
     if (this.currentSpeed < this.maxNegativeSpeed) {
@@ -410,7 +410,7 @@ startMovementTimer(): void {
   this.stopAngularMovementTimer();
 
   this.movementTimer = setInterval(() => {
-    this.currentSpeed = parseFloat(this.currentSpeed.toFixed(1));
+    this.currentSpeed = parseFloat(this.currentSpeed.toFixed(3));
     this.message = new ROSLIB.Message({
       linear: {
         x: this.currentSpeed,
@@ -443,7 +443,7 @@ angularMovementTimer: any; // Temporizador para el movimiento angular
 goLeft(): void {
   if (this.topic) {
     // Incrementa la velocidad angular en sentido horario
-    this.currentAngularSpeed += 1;
+    this.currentAngularSpeed += 0.3;
 
     // Verifica el límite máximo de velocidad angular en sentido horario
     if (this.currentAngularSpeed > this.maxLeftSpeed) {
@@ -460,7 +460,7 @@ goLeft(): void {
 goRight(): void {
   if (this.topic) {
     // Incrementa la velocidad angular en sentido antihorario
-    this.currentAngularSpeed -= 1;
+    this.currentAngularSpeed -= 0.3;
 
     // Verifica el límite máximo de velocidad angular en sentido antihorario
     if (this.currentAngularSpeed < this.maxRightSpeed) {
@@ -485,6 +485,7 @@ startAngularMovementTimer(): void {
   this.stopMovementTimer();
 
   this.angularMovementTimer = setInterval(() => {
+    this.currentAngularSpeed = parseFloat(this.currentAngularSpeed.toFixed(3));
     this.message = new ROSLIB.Message({
       linear: {
         x: 0,

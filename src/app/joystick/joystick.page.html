@@ -162,12 +162,12 @@
               <ion-col size="3" style="display: inline-flex; justify-content: center;">
                 <div *ngIf="currentSpeed !== 0" style="display: inline-flex; justify-content: start;">
                   <ion-icon [name]="currentSpeed > 0 ? 'arrow-up' : 'arrow-down'"></ion-icon>
-                  <pre>{{currentSpeed}} m/s</pre>
+                  <pre>{{currentSpeed}}</pre>
                 </div>
               </ion-col>
               <ion-col size="3" style="display: inline-flex; justify-content: center;">
                 <div *ngIf="currentAngularSpeed !== 0" style="display: inline-flex; justify-content: end;">
-                  <pre>{{currentAngularSpeed}} m/s</pre>
+                  <pre>{{currentAngularSpeed}}</pre>
                   <ion-icon [name]="currentAngularSpeed > 0 ? 'arrow-back' : 'arrow-forward'"></ion-icon>
                 </div>
               </ion-col>
