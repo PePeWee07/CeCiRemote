@@ -318,17 +318,17 @@ export class JoystickPage implements AfterViewInit, OnInit {
   setTopic(): void {
     if (this.ros) {
       //Suscribirse al topic de velocidad
-      // this.topic = new ROSLIB.Topic({
-      //   ros: this.ros,
-      //   name: '/mobile_base/commands/velocity',
-      //   messageType: 'geometry_msgs/Twist',
-      // });
-
       this.topic = new ROSLIB.Topic({
         ros: this.ros,
-        name: '/turtle1/cmd_vel',
+        name: '/mobile_base/commands/velocity',
         messageType: 'geometry_msgs/Twist',
       });
+
+      // this.topic = new ROSLIB.Topic({
+      //   ros: this.ros,
+      //   name: '/turtle1/cmd_vel',
+      //   messageType: 'geometry_msgs/Twist',
+      // });
 
       // Suscribirse al topic del pitido
       this.topicSound = new ROSLIB.Topic({
