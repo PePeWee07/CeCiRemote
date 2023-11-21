@@ -318,17 +318,17 @@ export class JoystickPage implements AfterViewInit, OnInit {
   setTopic(): void {
     if (this.ros) {
       //Suscribirse al topic de velocidad
-      this.topic = new ROSLIB.Topic({
-        ros: this.ros,
-        name: '/mobile_base/commands/velocity',
-        messageType: 'geometry_msgs/Twist',
-      });
-
       // this.topic = new ROSLIB.Topic({
       //   ros: this.ros,
-      //   name: '/turtle1/cmd_vel',
+      //   name: '/mobile_base/commands/velocity',
       //   messageType: 'geometry_msgs/Twist',
       // });
+
+      this.topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: '/turtle1/cmd_vel',
+        messageType: 'geometry_msgs/Twist',
+      });
 
       // Suscribirse al topic del pitido
       this.topicSound = new ROSLIB.Topic({
@@ -360,15 +360,15 @@ export class JoystickPage implements AfterViewInit, OnInit {
 
   // Variables de estado
 currentSpeed = 0;  // Velocidad actual
-maxPositiveSpeed = 5; // Límite máximo de velocidad positiva
-maxNegativeSpeed = -5; // Límite máximo de velocidad negativa
+maxPositiveSpeed = 0.6; // Límite máximo de velocidad positiva
+maxNegativeSpeed = -0.6; // Límite máximo de velocidad negativa
 movementTimer: any; // Variable para almacenar el temporizador
 
 // Método para avanzar
 goForward(): void {
   if (this.topic) {
     // Incrementa la velocidad al avanzar
-    this.currentSpeed += 1;
+    this.currentSpeed += 0.2;
 
     // Verifica el límite máximo de velocidad positiva
     if (this.currentSpeed > this.maxPositiveSpeed) {
@@ -385,7 +385,7 @@ goForward(): void {
 goBack(): void {
   if (this.topic) {
     // Reduzca la velocidad al retroceder
-    this.currentSpeed -= 1;
+    this.currentSpeed -= 0.2;
 
     // Verifica el límite máximo de velocidad negativa
     if (this.currentSpeed < this.maxNegativeSpeed) {
@@ -400,7 +400,17 @@ goBack(): void {
 
 // Método para iniciar el temporizador de movimiento
 startMovementTimer(): void {
+  // Detén el temporizador lineal si ya está en ejecución
+  this.stopMovementTimer();
+
+  // Establece la velocidad angular a cero
+  this.currentAngularSpeed = 0;
+
+  // Detén el temporizador angular
+  this.stopAngularMovementTimer();
+
   this.movementTimer = setInterval(() => {
+    this.currentSpeed = parseFloat(this.currentSpeed.toFixed(1));
     this.message = new ROSLIB.Message({
       linear: {
         x: this.currentSpeed,
@@ -416,6 +426,11 @@ startMovementTimer(): void {
     this.topic!.publish(this.message);
     console.log(`Sent Move command with speed: ${this.currentSpeed} m/s`);
   }, 100); // Ajusta el intervalo según tus necesidades
+}
+
+// Método para detener el temporizador de movimiento
+stopMovementTimer(): void {
+  clearInterval(this.movementTimer);
 }
 
  // Variables de estado para el movimiento angular
@@ -460,6 +475,15 @@ goRight(): void {
 
 // Método para iniciar el temporizador de movimiento angular
 startAngularMovementTimer(): void {
+  // Detén el temporizador angular si ya está en ejecución
+  this.stopAngularMovementTimer();
+
+  // Establece la velocidad lineal a cero
+  this.currentSpeed = 0;
+
+  // Detén el temporizador de movimiento lineal
+  this.stopMovementTimer();
+
   this.angularMovementTimer = setInterval(() => {
     this.message = new ROSLIB.Message({
       linear: {
@@ -476,6 +500,11 @@ startAngularMovementTimer(): void {
     this.topic!.publish(this.message);
     console.log(`Sent Angular Movement command with speed: ${this.currentAngularSpeed} rad/s`);
   }, 100); // Ajusta el intervalo según tus necesidades
+}
+
+// Método para detener el temporizador de movimiento angular
+stopAngularMovementTimer(): void {
+  clearInterval(this.angularMovementTimer);
 }
 
 // Método para detener el movimiento angular y lineal
